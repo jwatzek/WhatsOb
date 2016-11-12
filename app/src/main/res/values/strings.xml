@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">WhatsOb</string>
+
+    <!-- Main Menu Titles -->
+    <string name="action_settings">Settings</string>
+    <string name="action_add_note">Add Note</string>
+
+    <!-- Fragment Title Strings -->
+    <string name="view_fragment_title">View Note</string>
+    <string name="edit_fragment_title">Edit Note</string>
+    <string name="create_fragment_title">Create Note</string>
+    <string name="preferences_title">Application Settings</string>
+
+    <!-- Main List Long Click Context Menu -->
+    <string name="edit_menu">Edit</string>
+    <string name="delete_menu">Delete</string>
+
+    <!-- Fragment Widget Strings -->
+    <string name="save_note_button">Save Note</string>
+
+</resources>

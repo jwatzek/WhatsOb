@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="10dp"
+    android:paddingEnd="10dp"
+    android:paddingStart="12dp"
+    android:paddingTop="10dp">
+
+    <ImageView
+        android:id="@+id/viewNoteIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/p" />
+
+    <ScrollView
+        android:id="@+id/noteScrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/viewNoteIcon"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@id/viewNoteIcon">
+
+        <TextView
+            android:id="@+id/viewNoteTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Note Title"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/noteScrollView"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/viewNoteMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:textSize="18dp"
+            android:textColor="@android:color/black" />
+
+    </ScrollView>
+
+</RelativeLayout>
