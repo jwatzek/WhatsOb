@@ -8,19 +8,32 @@
 
     <ImageButton
         android:id="@+id/editNoteButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="16dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/g" />
+
+    <Chronometer
+        android:id="@+id/timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/p" />
+        android:layout_alignEnd="@id/editNoteButton"
+        android:layout_alignStart="@id/editNoteButton"
+        android:layout_below="@id/editNoteButton"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textStyle="bold" />
 
-    <ScrollView
+    <LinearLayout
         android:id="@+id/noteScrollView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/editNoteButton"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@id/editNoteButton">
+        android:layout_toEndOf="@id/editNoteButton"
+        android:layout_toStartOf="@+id/food_checkboxes"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/editNoteTitle"
@@ -28,10 +41,54 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:minLines="1"
-            android:text="Note Title"
+            android:text="11/7/2016 09:15 AM"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    </ScrollView>
+        <EditText
+            android:id="@+id/note_observer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Observer / Coder"
+            android:maxLines="1"
+            android:textAppearance="?android:textAppearanceSmall" />
+
+        <EditText
+            android:id="@+id/note_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Comments"
+            android:maxLines="1"
+            android:textAppearance="?android:textAppearanceSmall" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@id/food_checkboxes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fed" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food in enclosure" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/noteScrollView"
+        android:layout_margin="8dp"
+        android:background="@android:color/darker_gray" />
 
     <ScrollView
         android:id="@+id/messageScrollView"
@@ -39,28 +96,118 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/saveNote"
-        android:layout_below="@id/noteScrollView"
-        android:layout_marginTop="16dp">
+        android:layout_below="@id/separator">
 
         <EditText
             android:id="@+id/editNoteMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top"
+            android:hint="Observation text here"
             android:inputType="textMultiLine"
-            android:minLines="3"
-            android:text="New Text" />
+            android:minLines="3" />
 
     </ScrollView>
 
-    <Button
-        android:id="@id/saveNote"
+    <!--<View-->
+    <!--android:id="@+id/separator2"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:layout_above="@+id/grid_layout"-->
+    <!--android:layout_margin="8dp"-->
+    <!--android:background="@android:color/darker_gray" />-->
+
+    <GridLayout
+        android:id="@+id/grid_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@id/messageScrollView"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:text="@string/save_note_button" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
+        android:rowCount="6">
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="8dp"
+            android:text="Individuals"
+            android:textColor="@color/colorAccent" />
+
+        <!--android:backgroundTint="@color/bgAccent"-->
+        <Button android:text="Griffin" />
+
+        <Button android:text="Lily" />
+
+        <Button android:text="Lexi" />
+
+        <Button android:text="Widget" />
+
+        <Button android:text="Wren" />
+
+
+        <Space android:layout_width="32dp" />
+
+        <Space />
+
+        <Space />
+
+        <Space />
+
+        <Space />
+
+        <Space />
+
+
+        <TextView
+            android:layout_gravity="center"
+            android:paddingBottom="8dp"
+            android:text="Behaviors"
+            android:textColor="@color/colorAccent" />
+
+        <Button
+            android:layout_gravity="fill_horizontal"
+            android:text="Contact" />
+
+        <Button
+            android:layout_gravity="fill_horizontal"
+            android:text="Proximity" />
+
+        <Button
+            android:layout_gravity="fill_horizontal"
+            android:text="Groom" />
+
+        <Button
+            android:layout_gravity="fill_horizontal"
+            android:text="Inactive" />
+
+        <Button
+            android:layout_gravity="fill_horizontal"
+            android:text="Feed+" />
+
+        <Space />
+
+        <Button
+            android:layout_gravity="fill_horizontal"
+            android:text="Manipulate" />
+
+        <Button
+            android:layout_gravity="fill_horizontal"
+            android:text="Locomote" />
+
+        <Button
+            android:layout_gravity="fill_horizontal"
+            android:text="Abnormal" />
+
+        <Button
+            android:layout_gravity="fill_horizontal"
+            android:text="Other+" />
+
+        <Button
+            android:id="@+id/saveNote"
+            android:layout_gravity="fill_horizontal"
+            android:text="@string/enter_button"
+            android:textColor="@color/colorAccent" />
+
+    </GridLayout>
 
 </RelativeLayout>

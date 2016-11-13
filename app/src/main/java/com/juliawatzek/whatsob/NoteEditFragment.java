@@ -6,16 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
-import static android.R.attr.id;
-import static android.provider.CallLog.Calls.NEW;
 
 
 public class NoteEditFragment extends Fragment {
@@ -105,7 +101,7 @@ public class NoteEditFragment extends Fragment {
 
     private void buildCategoryDialog() {
 
-        final String[] categories = new String[]{"Personal", "Technical", "Quote", "Finance"};
+        final String[] categories = new String[]{"Griffin's Group", "Liam's Group", "Mason's Group", "Nkima's Group"};
 
         AlertDialog.Builder categoryBuilder = new AlertDialog.Builder(getActivity());
         categoryBuilder.setTitle("Choose Note Type");
@@ -119,20 +115,20 @@ public class NoteEditFragment extends Fragment {
 
                 switch (item) {
                     case 0:
-                        savedButtonCategory = Note.Category.PERSONAL;
-                        noteCatButton.setImageResource(R.drawable.p);
+                        savedButtonCategory = Note.Category.GRIFFIN;
+                        noteCatButton.setImageResource(R.drawable.g);
                         break;
                     case 1:
-                        savedButtonCategory = Note.Category.TECHNICAL;
-                        noteCatButton.setImageResource(R.drawable.t);
+                        savedButtonCategory = Note.Category.LIAM;
+                        noteCatButton.setImageResource(R.drawable.l);
                         break;
                     case 2:
-                        savedButtonCategory = Note.Category.QUOTE;
-                        noteCatButton.setImageResource(R.drawable.q);
+                        savedButtonCategory = Note.Category.MASON;
+                        noteCatButton.setImageResource(R.drawable.m);
                         break;
                     case 3:
-                        savedButtonCategory = Note.Category.FINANCE;
-                        noteCatButton.setImageResource(R.drawable.f);
+                        savedButtonCategory = Note.Category.NKIMA;
+                        noteCatButton.setImageResource(R.drawable.n);
                         break;
                 }
 
@@ -156,7 +152,7 @@ public class NoteEditFragment extends Fragment {
                 if (newNote) {
                     // if it's a new note create it in our database
                     dbAdapter.createNote(title.getText() + "", message.getText() + "",
-                            (savedButtonCategory == null)? Note.Category.PERSONAL : savedButtonCategory);
+                            (savedButtonCategory == null)? Note.Category.GRIFFIN : savedButtonCategory);
                 } else {
                     // otherwise it's an old not so update it in our database
                     dbAdapter.updateNote(noteId, title.getText() + "", message.getText() + "",

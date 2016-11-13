@@ -6,7 +6,7 @@ public class Note {
     private long noteId, dateCreatedMilli;
     private Category category;
 
-    public enum Category {PERSONAL, TECHNICAL, QUOTE, FINANCE}
+    public enum Category {GRIFFIN, LIAM, MASON, NKIMA}
 
     public Note(String title, String message, Category category) {
         this.title = title;
@@ -63,17 +63,17 @@ public class Note {
 
     public static int categoryToDrawable(Category noteCategory) {
         switch (noteCategory){
-            case PERSONAL:
-                return R.drawable.p;
-            case TECHNICAL:
-                return R.drawable.t;
-            case QUOTE:
-                return R.drawable.q;
-            case FINANCE:
-                return R.drawable.f;
+            case GRIFFIN:
+                return R.drawable.g;
+            case LIAM:
+                return R.drawable.l;
+            case MASON:
+                return R.drawable.m;
+            case NKIMA:
+                return R.drawable.n;
         }
 
-        return R.drawable.f;
+        return R.drawable.g;
     }
 
 }

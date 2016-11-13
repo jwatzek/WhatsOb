@@ -2,11 +2,13 @@ package com.juliawatzek.whatsob;
 
 
 import android.app.ListFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +18,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import static android.R.id.message;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -24,6 +28,8 @@ public class MainActivityListFragment extends ListFragment {
     private ArrayList<Note> notes;
     private NoteAdapter noteAdapter;
 
+    private AlertDialog deleteDialogObject;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -31,12 +37,12 @@ public class MainActivityListFragment extends ListFragment {
         /*
         notes = new ArrayList<>();
         notes.add(new Note("This is a new note title", "This is the body of our note",
-                Note.Category.PERSONAL));
+                Note.Category.LIAM));
         notes.add(new Note("This is a new note title make this title insanely long to just see how this is gonna work",
                 "This is the body of our note",
-                Note.Category.FINANCE));
+                Note.Category.GRIFFIN));
         notes.add(new Note("This is a new note title", "This is the body of our note",
-                Note.Category.QUOTE));
+                Note.Category.MASON));
         */
 
         // read notes from database
@@ -104,6 +110,24 @@ public class MainActivityListFragment extends ListFragment {
                 return true;
 
             case R.id.delete:
+                buildDeleteDialog(note);
+                deleteDialogObject.show();
+                return true;
+        }
+
+        return super.onContextItemSelected(item);
+
+    }
+
+    private void buildDeleteDialog(final Note note) {
+
+        AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(getActivity());
+        deleteBuilder.setTitle("Are you sure?");
+        deleteBuilder.setMessage("Are you sure you want to delete the note?");
+
+        deleteBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
                 NotebookDbAdapter dbAdapter = new NotebookDbAdapter(getActivity().getBaseContext());
                 dbAdapter.open();
                 dbAdapter.deleteNote(note.getNoteId());
@@ -114,10 +138,17 @@ public class MainActivityListFragment extends ListFragment {
                 noteAdapter.notifyDataSetChanged();
 
                 dbAdapter.close();
-                return true;
-        }
+            }
+        });
 
-        return super.onContextItemSelected(item);
+        deleteBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // do nothing here.
+            }
+        });
+
+        deleteDialogObject = deleteBuilder.create();
 
     }
 

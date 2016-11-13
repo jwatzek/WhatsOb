@@ -8,10 +8,11 @@
 
     <ImageView
         android:id="@+id/viewNoteIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/p" />
+        android:scaleType="fitCenter"
+        android:src="@drawable/g" />
 
     <ScrollView
         android:id="@+id/noteScrollView"

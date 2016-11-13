@@ -33,7 +33,7 @@ public class NoteAdapter extends ArrayAdapter<Note> {
         // Check if an existing view is being reused, otherwise inflate a new view from custom row layout
         if (convertView == null) {
 
-            // if we don't have a view that is being used, create one and make sure you create a
+            // if we don'n have a view that is being used, create one and make sure you create a
             // view holder along with it to save our view references to
             viewHolder = new ViewHolder();
 

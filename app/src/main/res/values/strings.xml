@@ -17,7 +17,7 @@
     <string name="delete_menu">Delete</string>
 
     <!-- Fragment Widget Strings -->
-    <string name="save_note_button">Save Note</string>
+    <string name="enter_button">Enter</string>
 
     <!-- Share Dialog -->
     <string name="send_to">Send file using</string>
