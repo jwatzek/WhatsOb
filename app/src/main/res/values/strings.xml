@@ -12,10 +12,14 @@
     <string name="preferences_title">Application Settings</string>
 
     <!-- Main List Long Click Context Menu -->
+    <string name="share_menu">Share</string>
     <string name="edit_menu">Edit</string>
     <string name="delete_menu">Delete</string>
 
     <!-- Fragment Widget Strings -->
     <string name="save_note_button">Save Note</string>
+
+    <!-- Share Dialog -->
+    <string name="send_to">Send file using</string>
 
 </resources>

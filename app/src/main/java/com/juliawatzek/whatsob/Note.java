@@ -48,12 +48,11 @@ public class Note {
     public String toString() {
         String s = "";
 
-        s += "ID: " + noteId;
-        s += " Title: " + title;
-        s += " Message: " + message;
-        s += " IconID: " + category.name();
-        s += " Note ID: " + noteId;
-        s += " Date: " + dateCreatedMilli;
+        s += "Note ID: " + noteId;
+        s += "\nTitle: " + title;
+        s += "\nMessage: " + message;
+        s += "\nCategory: " + category.name();
+        s += "\nDate: " + dateCreatedMilli;
 
         return s;
     }

@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Note Title"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </ScrollView>
 
@@ -44,9 +44,7 @@
             android:id="@+id/viewNoteMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"
-            android:textSize="18dp"
-            android:textColor="@android:color/black" />
+            android:text="New Text" />
 
     </ScrollView>
 

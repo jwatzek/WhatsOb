@@ -3,14 +3,14 @@ package com.juliawatzek.whatsob;
 
 import android.app.ListFragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -79,10 +79,30 @@ public class MainActivityListFragment extends ListFragment {
 
         // returns id of the selected menu item
         switch (item.getItemId()) {
-            // if we press edit
+
+            case R.id.share:
+
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                boolean isFormatCSV = sharedPreferences.getBoolean("file_format", false);
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+
+                // TODO: format data accordingly
+                if (isFormatCSV) {
+                    intent.setType("text/csv");
+                } else {
+                    intent.setType("text/plain");
+                }
+
+                intent.putExtra(Intent.EXTRA_TEXT, note + "");
+
+                startActivity(Intent.createChooser(intent, getResources().getText(R.string.send_to)));
+                return true;
+
             case R.id.edit:
                 launchNoteDetailActivity(MainActivity.FragmentToLaunch.EDIT, rowPosition);
                 return true;
+
             case R.id.delete:
                 NotebookDbAdapter dbAdapter = new NotebookDbAdapter(getActivity().getBaseContext());
                 dbAdapter.open();
