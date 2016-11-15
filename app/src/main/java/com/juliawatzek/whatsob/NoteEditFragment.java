@@ -104,7 +104,7 @@ public class NoteEditFragment extends Fragment {
         final String[] categories = new String[]{"Griffin's Group", "Liam's Group", "Mason's Group", "Nkima's Group"};
 
         AlertDialog.Builder categoryBuilder = new AlertDialog.Builder(getActivity());
-        categoryBuilder.setTitle("Choose Note Type");
+        categoryBuilder.setTitle("Choose Group");
 
         categoryBuilder.setSingleChoiceItems(categories, 0, new DialogInterface.OnClickListener() {
             @Override

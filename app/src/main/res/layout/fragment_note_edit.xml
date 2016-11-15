@@ -22,7 +22,7 @@
         android:layout_alignStart="@id/editNoteButton"
         android:layout_below="@id/editNoteButton"
         android:layout_gravity="center"
-        android:layout_marginTop="8dp"
+        android:padding="8dp"
         android:gravity="center"
         android:textStyle="bold" />
 
@@ -66,8 +66,9 @@
         android:id="@id/food_checkboxes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="16dp"
+        android:layout_alignBottom="@+id/timer"
+        android:layout_marginEnd="32dp"
+        android:layout_toStartOf="@+id/start_button"
         android:orientation="vertical">
 
         <CheckBox
@@ -81,6 +82,18 @@
             android:text="Food in enclosure" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@id/start_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/food_checkboxes"
+        android:layout_alignParentEnd="true"
+        android:text="Start"
+        android:textAllCaps="false"
+        android:textColor="@color/colorAccent" />
+
+
 
     <View
         android:id="@+id/separator"
@@ -117,97 +130,137 @@
     <!--android:layout_margin="8dp"-->
     <!--android:background="@android:color/darker_gray" />-->
 
-    <GridLayout
-        android:id="@+id/grid_layout"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:orientation="vertical"
-        android:rowCount="6">
+        android:gravity="center_horizontal">
 
-        <TextView
-            android:layout_gravity="center_horizontal"
-            android:paddingBottom="8dp"
-            android:text="Individuals"
-            android:textColor="@color/colorAccent" />
+        <LinearLayout
+            android:id="@+id/layout_ids"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="24dp"
+            android:orientation="vertical">
 
-        <!--android:backgroundTint="@color/bgAccent"-->
-        <Button android:text="Griffin" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="8dp"
+                android:text="Individuals"
+                android:textColor="@color/colorAccent" />
 
-        <Button android:text="Lily" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Griffin" />
 
-        <Button android:text="Lexi" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lily" />
 
-        <Button android:text="Widget" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lexi" />
 
-        <Button android:text="Wren" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Widget" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wren" />
+
+        </LinearLayout>
+
+        <GridLayout
+            android:id="@+id/layout_behavs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:rowCount="6">
+
+            <TextView
+                android:layout_gravity="center"
+                android:paddingBottom="8dp"
+                android:text="Behaviors"
+                android:textColor="@color/colorAccent" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Contact" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Proximity" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Groom" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Play" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Sexual" />
 
 
-        <Space android:layout_width="32dp" />
+            <Space />
 
-        <Space />
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Feed" />
 
-        <Space />
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Share+" />
 
-        <Space />
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Inactive" />
 
-        <Space />
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Manipulate" />
 
-        <Space />
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Locomote" />
 
+            <Space />
 
-        <TextView
-            android:layout_gravity="center"
-            android:paddingBottom="8dp"
-            android:text="Behaviors"
-            android:textColor="@color/colorAccent" />
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Aggression" />
 
-        <Button
-            android:layout_gravity="fill_horizontal"
-            android:text="Contact" />
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Supplant" />
 
-        <Button
-            android:layout_gravity="fill_horizontal"
-            android:text="Proximity" />
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Abnormal" />
 
-        <Button
-            android:layout_gravity="fill_horizontal"
-            android:text="Groom" />
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Other+" />
 
-        <Button
-            android:layout_gravity="fill_horizontal"
-            android:text="Inactive" />
+            <Button
+                android:id="@+id/saveNote"
+                android:layout_gravity="fill_horizontal"
+                android:text="@string/enter_button"
+                android:textColor="@color/colorAccent" />
 
-        <Button
-            android:layout_gravity="fill_horizontal"
-            android:text="Feed+" />
-
-        <Space />
-
-        <Button
-            android:layout_gravity="fill_horizontal"
-            android:text="Manipulate" />
-
-        <Button
-            android:layout_gravity="fill_horizontal"
-            android:text="Locomote" />
-
-        <Button
-            android:layout_gravity="fill_horizontal"
-            android:text="Abnormal" />
-
-        <Button
-            android:layout_gravity="fill_horizontal"
-            android:text="Other+" />
-
-        <Button
-            android:id="@+id/saveNote"
-            android:layout_gravity="fill_horizontal"
-            android:text="@string/enter_button"
-            android:textColor="@color/colorAccent" />
-
-    </GridLayout>
+        </GridLayout>
+    </LinearLayout>
 
 </RelativeLayout>
