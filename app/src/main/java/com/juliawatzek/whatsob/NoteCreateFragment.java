@@ -14,6 +14,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.text.DateFormat;
+import java.util.Date;
+
 public class NoteCreateFragment extends Fragment {
 
     private TextView title;
@@ -23,7 +27,6 @@ public class NoteCreateFragment extends Fragment {
     private AlertDialog categoryDialogObject, confirmDialogObject;
 
     private static final String MODIFIED_CATEGORY = "Modified Category";
-    private long noteId = 0;
 
     public NoteCreateFragment() {
         // Required empty public constructor
@@ -45,14 +48,14 @@ public class NoteCreateFragment extends Fragment {
         title = (TextView) fragmentLayout.findViewById(R.id.createNoteTitle);
         message = (EditText) fragmentLayout.findViewById(R.id.createNoteMessage);
         noteCatButton = (ImageButton) fragmentLayout.findViewById(R.id.createNoteButton);
-        Button saveButton = (Button) fragmentLayout.findViewById(R.id.createNote);
+        Button enterButton = (Button) fragmentLayout.findViewById(R.id.createNote);
 
         // populate widgets with note data
         Intent intent = getActivity().getIntent();
 
-        title.setText(intent.getExtras().getString(MainActivity.NOTE_TITLE_EXTRA, ""));
-        message.setText(intent.getExtras().getString(MainActivity.NOTE_MESSAGE_EXTRA, ""));
-        noteId = intent.getExtras().getLong(MainActivity.NOTE_ID_EXTRA, 0);
+        // Set 'title' to current date and time
+        String currentDateTime = DateFormat.getDateTimeInstance().format(new Date());
+        title.setText(currentDateTime);
 
         // if we came from our list fragment, get category from intent
         // otherwise (i.e., if we changed screen orientation), skip this and just set the image to
@@ -71,7 +74,7 @@ public class NoteCreateFragment extends Fragment {
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        enterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 confirmDialogObject.show();
@@ -139,9 +142,9 @@ public class NoteCreateFragment extends Fragment {
                 NotebookDbAdapter dbAdapter = new NotebookDbAdapter(getActivity().getBaseContext());
                 dbAdapter.open();
 
-                // update note in our database
-                dbAdapter.updateNote(noteId, title.getText() + "", message.getText() + "",
-                        savedButtonCategory);
+                // create new note in our database
+                dbAdapter.createNote(title.getText() + "", message.getText() + "",
+                        (savedButtonCategory == null) ? Note.Category.GRIFFIN : savedButtonCategory);
 
                 dbAdapter.close();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
