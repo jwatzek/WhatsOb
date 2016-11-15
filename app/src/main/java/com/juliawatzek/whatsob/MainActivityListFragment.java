@@ -18,11 +18,6 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import static android.R.id.message;
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class MainActivityListFragment extends ListFragment {
 
     private ArrayList<Note> notes;
@@ -33,17 +28,6 @@ public class MainActivityListFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        /*
-        notes = new ArrayList<>();
-        notes.add(new Note("This is a new note title", "This is the body of our note",
-                Note.Category.LIAM));
-        notes.add(new Note("This is a new note title make this title insanely long to just see how this is gonna work",
-                "This is the body of our note",
-                Note.Category.GRIFFIN));
-        notes.add(new Note("This is a new note title", "This is the body of our note",
-                Note.Category.MASON));
-        */
 
         // read notes from database
         NotebookDbAdapter dbAdapter = new NotebookDbAdapter(getActivity().getBaseContext());

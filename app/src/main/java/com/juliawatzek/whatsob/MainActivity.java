@@ -63,12 +63,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AppPreferences.class);
             startActivity(intent);
             return true;
-        } /* else if (id == R.id.action_add_note) {
-            Intent intent = new Intent(this, NoteDetailActivity.class);
-            intent.putExtra(MainActivity.NOTE_FRAGMENT_TO_LOAD_EXTRA, MainActivity.FragmentToLaunch.CREATE);
-            startActivity(intent);
-            return true;
-        } */
+        }
 
         return super.onOptionsItemSelected(item);
     }

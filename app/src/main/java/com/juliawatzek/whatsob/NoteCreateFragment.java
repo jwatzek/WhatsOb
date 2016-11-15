@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import static android.R.id.message;
-
-
-public class NoteEditFragment extends Fragment {
+public class NoteCreateFragment extends Fragment {
 
     private TextView title;
     private EditText message;
@@ -31,7 +25,7 @@ public class NoteEditFragment extends Fragment {
     private static final String MODIFIED_CATEGORY = "Modified Category";
     private long noteId = 0;
 
-    public NoteEditFragment() {
+    public NoteCreateFragment() {
         // Required empty public constructor
     }
 
@@ -45,13 +39,13 @@ public class NoteEditFragment extends Fragment {
         }
 
         // Inflate the layout for this fragment
-        View fragmentLayout = inflater.inflate(R.layout.fragment_note_edit, container, false);
+        View fragmentLayout = inflater.inflate(R.layout.fragment_note_create, container, false);
 
         // grab widget references from layout
-        title = (TextView) fragmentLayout.findViewById(R.id.editNoteTitle);
-        message = (EditText) fragmentLayout.findViewById(R.id.editNoteMessage);
-        noteCatButton = (ImageButton) fragmentLayout.findViewById(R.id.editNoteButton);
-        Button saveButton = (Button) fragmentLayout.findViewById(R.id.saveNote);
+        title = (TextView) fragmentLayout.findViewById(R.id.createNoteTitle);
+        message = (EditText) fragmentLayout.findViewById(R.id.createNoteMessage);
+        noteCatButton = (ImageButton) fragmentLayout.findViewById(R.id.createNoteButton);
+        Button saveButton = (Button) fragmentLayout.findViewById(R.id.createNote);
 
         // populate widgets with note data
         Intent intent = getActivity().getIntent();
@@ -66,8 +60,6 @@ public class NoteEditFragment extends Fragment {
         if (savedButtonCategory == null) {
             savedButtonCategory = (Note.Category) intent.getSerializableExtra(MainActivity.NOTE_CATEGORY_EXTRA);
         }
-
-        noteCatButton.setImageResource(Note.categoryToDrawable(savedButtonCategory));
 
         buildCategoryDialog();
         buildConfirmDialog();
@@ -147,7 +139,7 @@ public class NoteEditFragment extends Fragment {
                 NotebookDbAdapter dbAdapter = new NotebookDbAdapter(getActivity().getBaseContext());
                 dbAdapter.open();
 
-                // update note in database
+                // update note in our database
                 dbAdapter.updateNote(noteId, title.getText() + "", message.getText() + "",
                         savedButtonCategory);
 

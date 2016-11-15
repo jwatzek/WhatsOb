@@ -1,0 +1,252 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="10dp"
+    android:paddingEnd="10dp"
+    android:paddingStart="12dp"
+    android:paddingTop="10dp">
+
+    <ImageButton
+        android:id="@+id/createNoteButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="16dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/g" />
+
+    <Chronometer
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/createNoteButton"
+        android:layout_alignStart="@id/createNoteButton"
+        android:layout_below="@id/createNoteButton"
+        android:layout_gravity="center"
+        android:padding="8dp"
+        android:gravity="center"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/noteScrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@id/createNoteButton"
+        android:layout_toStartOf="@+id/food_checkboxes"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/createNoteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="11/7/2016 09:15 AM"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/createNoteObserver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Observer / Coder"
+            android:maxLines="1"
+            android:textAppearance="?android:textAppearanceSmall" />
+
+        <EditText
+            android:id="@+id/createNoteComments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Comments"
+            android:maxLines="1"
+            android:textAppearance="?android:textAppearanceSmall" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@id/food_checkboxes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/noteScrollView"
+        android:layout_marginEnd="32dp"
+        android:layout_alignParentEnd="true"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fed" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Food in enclosure" />
+
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start"
+            android:textAllCaps="false"
+             />
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/noteScrollView"
+        android:layout_margin="8dp"
+        android:background="@android:color/darker_gray" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/separator">
+
+        <EditText
+            android:id="@+id/createNoteMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:hint="Observation text here"
+            android:inputType="textMultiLine"
+            android:minLines="3" />
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/quickTextButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:id="@+id/layoutIds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="24dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="8dp"
+                android:text="Individuals"
+                android:textColor="@color/colorAccent" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Griffin" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lily" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lexi" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Widget" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wren" />
+
+        </LinearLayout>
+
+        <GridLayout
+            android:id="@+id/layoutBehavs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:rowCount="6">
+
+            <TextView
+                android:layout_gravity="center"
+                android:paddingBottom="8dp"
+                android:text="Behaviors"
+                android:textColor="@color/colorAccent" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Contact" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Proximity" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Groom" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Play" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Sexual" />
+
+
+            <Space />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Feed" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Share+" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Inactive" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Manipulate" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Locomote" />
+
+            <Space />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Aggression" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Supplant" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Abnormal" />
+
+            <Button
+                android:layout_gravity="fill_horizontal"
+                android:text="Other+" />
+
+            <Button
+                android:id="@+id/createNote"
+                android:layout_gravity="fill_horizontal"
+                android:text="@string/enter_button"
+                android:textColor="@color/colorAccent" />
+
+        </GridLayout>
+    </LinearLayout>
+
+</RelativeLayout>
