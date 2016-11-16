@@ -15,7 +15,7 @@
         android:src="@drawable/g" />
 
     <LinearLayout
-        android:id="@+id/noteScrollView"
+        android:id="@+id/editNoteView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="11/7/2016 09:15 AM"
-            android:textAppearance="?android:textAppearanceMedium"/>
+            android:textAppearance="?android:textAppearanceMedium" />
 
         <EditText
             android:id="@+id/note_observer"
@@ -52,7 +52,7 @@
         android:id="@id/food_checkboxes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/noteScrollView"
+        android:layout_alignBottom="@+id/editNoteView"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="32dp"
         android:orientation="vertical">
@@ -79,13 +79,14 @@
         android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/noteScrollView"
+        android:layout_below="@id/editNoteView"
         android:layout_margin="8dp"
         android:background="@android:color/darker_gray" />
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/saveNote"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_below="@id/separator">
@@ -95,9 +96,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top"
-            android:hint="Observation text here"
+            android:hint="Observation Data"
             android:inputType="textMultiLine"
-            android:minLines="3" />
+            android:lineSpacingMultiplier="1.5"
+            android:minLines="3"
+            android:padding="8dp"
+            android:textAppearance="?android:textAppearanceMedium" />
 
     </ScrollView>
 

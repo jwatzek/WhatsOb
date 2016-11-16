@@ -10,21 +10,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
-import java.util.Calendar;
 import java.text.DateFormat;
 import java.util.Date;
 
 public class NoteCreateFragment extends Fragment {
 
-    private TextView title;
-    private EditText message;
+    private TextView title, message;
     private ImageButton noteCatButton;
+    private LinearLayout quickTextButtons;
+    private ScrollView scroll;
     private Note.Category savedButtonCategory;
-    private AlertDialog categoryDialogObject, confirmDialogObject;
+    private AlertDialog categoryDialogObject;
+    private Note note;
 
     private static final String MODIFIED_CATEGORY = "Modified Category";
 
@@ -46,9 +49,11 @@ public class NoteCreateFragment extends Fragment {
 
         // grab widget references from layout
         title = (TextView) fragmentLayout.findViewById(R.id.createNoteTitle);
-        message = (EditText) fragmentLayout.findViewById(R.id.createNoteMessage);
+        message = (TextView) fragmentLayout.findViewById(R.id.createNoteMessage);
         noteCatButton = (ImageButton) fragmentLayout.findViewById(R.id.createNoteButton);
+        quickTextButtons = (LinearLayout) fragmentLayout.findViewById(R.id.quickTextButtons);
         Button enterButton = (Button) fragmentLayout.findViewById(R.id.createNote);
+        Button startButton = (Button) fragmentLayout.findViewById(R.id.startButton);
 
         // populate widgets with note data
         Intent intent = getActivity().getIntent();
@@ -56,6 +61,11 @@ public class NoteCreateFragment extends Fragment {
         // Set 'title' to current date and time
         String currentDateTime = DateFormat.getDateTimeInstance().format(new Date());
         title.setText(currentDateTime);
+        message.setText("");
+
+        // Get scrollview
+        scroll = (ScrollView) fragmentLayout.findViewById(R.id.createScrollView);
+
 
         // if we came from our list fragment, get category from intent
         // otherwise (i.e., if we changed screen orientation), skip this and just set the image to
@@ -65,8 +75,6 @@ public class NoteCreateFragment extends Fragment {
         }
 
         buildCategoryDialog();
-        buildConfirmDialog();
-
         noteCatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,10 +82,58 @@ public class NoteCreateFragment extends Fragment {
             }
         });
 
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: start timer
+
+                // first prompt
+                message.append("\u00BB  ");
+
+                // show quick-text buttons
+                quickTextButtons.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // attach onClickListeners to all ID buttons 
+        LinearLayout individuals = (LinearLayout) fragmentLayout.findViewById(R.id.layoutIds);
+        int idCount = individuals.getChildCount();
+
+        for (int i = 0; i < idCount; i++) {
+            View view = individuals.getChildAt(i);
+
+            if (view instanceof Button) {
+                final Button id = (Button) view;
+                id.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View view) {
+                        message.append(id.getText() + " ");
+                    }
+                });
+            }
+        }
+
+        // attach onClickListeners to all behavior buttons 
+        GridLayout grid = (GridLayout) fragmentLayout.findViewById(R.id.layoutBehavs);
+        int behavCount = grid.getChildCount();
+
+        for (int i = 0; i < behavCount; i++) {
+            View view = grid.getChildAt(i);
+
+            if (view instanceof Button) {
+                final Button behav = (Button) view;
+                behav.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View view) {
+                        message.append(behav.getText() + " ");
+                    }
+                });
+            }
+        }
+        
+        // this needs to be after grid onClickListeners in order to override them
         enterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmDialogObject.show();
+                enterDataRow();
             }
         });
 
@@ -89,6 +145,7 @@ public class NoteCreateFragment extends Fragment {
         super.onSaveInstanceState(savedInstanceState);
 
         savedInstanceState.putSerializable(MODIFIED_CATEGORY, savedButtonCategory);
+        // TODO: Save visibility of quick-text buttons + message etc.! Everything that gets overwritten or reset on onCreate.
     }
 
 
@@ -130,36 +187,31 @@ public class NoteCreateFragment extends Fragment {
         categoryDialogObject = categoryBuilder.create();
     }
 
-    private void buildConfirmDialog() {
+    private void enterDataRow() {
 
-        AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(getActivity());
-        confirmBuilder.setTitle("Are you sure?");
-        confirmBuilder.setMessage("Are you sure you want to save the note?");
+        // add linebreak
+        message.append("\n\u00BB  ");
 
-        confirmBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+        // scroll to bottom?
+        scroll.post(new Runnable() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                NotebookDbAdapter dbAdapter = new NotebookDbAdapter(getActivity().getBaseContext());
-                dbAdapter.open();
-
-                // create new note in our database
-                dbAdapter.createNote(title.getText() + "", message.getText() + "",
-                        (savedButtonCategory == null) ? Note.Category.GRIFFIN : savedButtonCategory);
-
-                dbAdapter.close();
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
+            public void run() {
+                scroll.fullScroll(View.FOCUS_DOWN);
             }
         });
 
-        confirmBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // do nothing here.
-            }
-        });
+        NotebookDbAdapter dbAdapter = new NotebookDbAdapter(getActivity().getBaseContext());
+        dbAdapter.open();
 
-        confirmDialogObject = confirmBuilder.create();
+        if (note != null) {
+            // if there is a note, update it in database
+            dbAdapter.updateNote(note.getNoteId(), title.getText() + "", message.getText() + "", note.getCategory());
+        } else {
+            // else, save as new note in our database
+            note = dbAdapter.createNote(title.getText() + "", message.getText() + "",
+                    (savedButtonCategory == null) ? Note.Category.GRIFFIN : savedButtonCategory);
+        }
+        dbAdapter.close();
 
     }
 }
