@@ -4,7 +4,6 @@ package com.juliawatzek.whatsob;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -18,7 +17,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -28,13 +26,15 @@ public class NoteCreateFragment extends Fragment {
 
     private TextView title, message;
     private ImageButton noteCatButton;
+    private Button enterButton, startButton;
     private LinearLayout quickTextButtons;
     private ScrollView scroll;
     private Note.Category savedButtonCategory;
-    private AlertDialog categoryDialogObject;
+    private AlertDialog categoryDialogObject, confirmDialogObject;
     private Note note;
     private Chronometer timer;
     private boolean timestampNext = true;
+    private boolean isStart = true;
 
     private static final String MODIFIED_CATEGORY = "Modified Category";
 
@@ -43,7 +43,7 @@ public class NoteCreateFragment extends Fragment {
     }
 
 
-    private String milliToMinSec (long timeInMillies) {
+    private String milliToMinSec(long timeInMillies) {
         return String.format("%02d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(timeInMillies),
                 TimeUnit.MILLISECONDS.toSeconds(timeInMillies) -
@@ -67,8 +67,8 @@ public class NoteCreateFragment extends Fragment {
         message = (TextView) fragmentLayout.findViewById(R.id.createNoteMessage);
         noteCatButton = (ImageButton) fragmentLayout.findViewById(R.id.createNoteButton);
         quickTextButtons = (LinearLayout) fragmentLayout.findViewById(R.id.quickTextButtons);
-        Button enterButton = (Button) fragmentLayout.findViewById(R.id.createNote);
-        Button startButton = (Button) fragmentLayout.findViewById(R.id.startButton);
+        enterButton = (Button) fragmentLayout.findViewById(R.id.createNote);
+        startButton = (Button) fragmentLayout.findViewById(R.id.startButton);
         timer = (Chronometer) fragmentLayout.findViewById(R.id.timer);
 
         // populate widgets with note data
@@ -90,6 +90,8 @@ public class NoteCreateFragment extends Fragment {
         }
 
         buildCategoryDialog();
+        buildConfirmDialog();
+
         noteCatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,34 +102,46 @@ public class NoteCreateFragment extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // start timer
-                timer.setBase(SystemClock.elapsedRealtime());
-                timer.start();
-
-                /*
-                // set 3min alarms
-                // TODO: add sounds, make snack bar
-                // TODO: figure out how to stop timer when navigated out of activity
-                new CountDownTimer(1800000 + 500, 180000) {
-
-                    public void onTick(long millisUntilFinished) {
-                            Toast.makeText(getActivity(), "SCAN TIME!", Toast.LENGTH_LONG).show();
-                    }
-
-                    public void onFinish() {
-                        Toast.makeText(getActivity(), "LAST SCAN!", Toast.LENGTH_LONG).show();
-                        this.cancel();
-                    }
-                }.start();
-                */
 
                 // TODO: On leaving screen, bring up confirm dialog. If really leaving, quit timer.
 
-                // first prompt
-                message.append("\u00BB  ");
+                if (isStart) {
+                    // start timer
+                    timer.setBase(SystemClock.elapsedRealtime());
+                    timer.start();
 
-                // show quick-text buttons
-                quickTextButtons.setVisibility(View.VISIBLE);
+                    // change text on Start button to Stop.
+                    startButton.setText("Stop");
+                    isStart = false;
+
+                    /*
+                    // set 3min alarms
+                    // TODO: add sounds, make snack bar
+                    // TODO: figure out how to stop timer when navigated out of activity
+                    new CountDownTimer(1800000 + 500, 180000) {
+
+                        public void onTick(long millisUntilFinished) {
+                                Toast.makeText(getActivity(), "SCAN TIME!", Toast.LENGTH_LONG).show();
+                        }
+
+                        public void onFinish() {
+                            Toast.makeText(getActivity(), "LAST SCAN!", Toast.LENGTH_LONG).show();
+                            this.cancel();
+                        }
+                    }.start();
+                    */
+
+                    // first prompt
+                    message.append("\u00BB  ");
+
+                    // show quick-text buttons
+                    quickTextButtons.setVisibility(View.VISIBLE);
+
+                } else {
+                    confirmDialogObject.show();
+                }
+
+
             }
         });
 
@@ -177,7 +191,7 @@ public class NoteCreateFragment extends Fragment {
                 });
             }
         }
-        
+
         // this needs to be after grid onClickListeners in order to override them
         enterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,6 +249,45 @@ public class NoteCreateFragment extends Fragment {
         });
         categoryDialogObject = categoryBuilder.create();
     }
+
+    private void buildConfirmDialog() {
+
+        AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(getActivity());
+        confirmBuilder.setTitle("Are you sure?");
+        confirmBuilder.setMessage("Are you sure you want to stop data collection?");
+
+        confirmBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                NotebookDbAdapter dbAdapter = new NotebookDbAdapter(getActivity().getBaseContext());
+                dbAdapter.open();
+
+                if (note != null) {
+                    // if there is a note, update it in database
+                    dbAdapter.updateNote(note.getNoteId(), title.getText() + "", message.getText() + "", note.getCategory());
+                } else {
+                    // else, save as new note in our database
+                    note = dbAdapter.createNote(title.getText() + "", message.getText() + "",
+                            (savedButtonCategory == null) ? Note.Category.GRIFFIN : savedButtonCategory);
+                }
+
+                dbAdapter.close();
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        confirmBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // do nothing here.
+            }
+        });
+
+        confirmDialogObject = confirmBuilder.create();
+
+    }
+
 
     private void enterDataRow() {
 
