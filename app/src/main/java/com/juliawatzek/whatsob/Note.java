@@ -3,18 +3,17 @@ package com.juliawatzek.whatsob;
 
 public class Note {
     private String title, message;
-    private long noteId, dateCreatedMilli;
+    private long noteId;
     private Category category;
     private boolean wasFed, hadFoodInEnclosure;
 
     public enum Category {GRIFFIN, LIAM, MASON, NKIMA}
 
-    public Note(String title, String message, Category category, long noteId, long dateCreatedMilli) {
+    public Note(String title, String message, Category category, long noteId) {
         this.title = title;
         this.message = message;
         this.category = category;
         this.noteId = noteId;
-        this.dateCreatedMilli = dateCreatedMilli;
         this.wasFed = false;
         this.hadFoodInEnclosure = false;
     }

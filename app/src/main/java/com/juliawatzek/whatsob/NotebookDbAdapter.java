@@ -20,10 +20,8 @@ public class NotebookDbAdapter {
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_MESSAGE = "message";
     public static final String COLUMN_CATEGORY = "category";
-    public static final String COLUMN_DATE = "date";
 
-    private String[] allColumns = { COLUMN_ID, COLUMN_TITLE, COLUMN_MESSAGE, COLUMN_CATEGORY,
-            COLUMN_DATE };
+    private String[] allColumns = { COLUMN_ID, COLUMN_TITLE, COLUMN_MESSAGE, COLUMN_CATEGORY };
 
     // SQL snippet
     public static final String CREATE_TABLE_NOTE = "create table " + NOTE_TABLE + " ( "
@@ -31,7 +29,7 @@ public class NotebookDbAdapter {
             + COLUMN_TITLE + " text not null, "
             + COLUMN_MESSAGE + " text not null, "
             + COLUMN_CATEGORY + " text not null, "
-            + COLUMN_DATE + " );";
+            + " );";
 
     private SQLiteDatabase sqlDB;
     private Context context;
@@ -57,7 +55,6 @@ public class NotebookDbAdapter {
         values.put(COLUMN_TITLE, title);
         values.put(COLUMN_MESSAGE, message);
         values.put(COLUMN_CATEGORY, category.name());
-        values.put(COLUMN_DATE, Calendar.getInstance().getTimeInMillis() + "");
 
         // insert the note we just created
         long insertId = sqlDB.insert(NOTE_TABLE, null, values);
@@ -83,7 +80,6 @@ public class NotebookDbAdapter {
         values.put(COLUMN_TITLE, newTitle);
         values.put(COLUMN_MESSAGE, newMessage);
         values.put(COLUMN_CATEGORY, newCategory.name());
-        values.put(COLUMN_DATE, Calendar.getInstance().getTimeInMillis() + "");
 
         // look in note table where col id is same as id to update
         // when you find it, update with the values I gave you
@@ -108,7 +104,7 @@ public class NotebookDbAdapter {
 
     private Note cursorToNote (Cursor cursor) {
          Note newNote = new Note(cursor.getString(1), cursor.getString(2),
-                Note.Category.valueOf(cursor.getString(3)), cursor.getLong(0), cursor.getLong(4));
+                Note.Category.valueOf(cursor.getString(3)), cursor.getLong(0));
 
         return newNote;
     }
