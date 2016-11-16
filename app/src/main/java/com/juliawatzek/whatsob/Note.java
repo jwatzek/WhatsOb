@@ -49,7 +49,7 @@ public class Note {
     }
 
     public String getObserver() {
-        return observer;
+        return "Observer: " + observer;
     }
 
     public String getComments() {
@@ -68,8 +68,8 @@ public class Note {
         String s = "";
 
         s += "# Date and Time: " + title;
-        s += "\n# Observer: ";
-        s += "\n# Comments: ";
+        s += "\n# Observer: " + observer;
+        s += "\n# Comments: " + comments;
         s += "\n# Fed: " + (wasFed? "Yes" : "No");
         s += "\n# Food in Enclosure: " + (hadFoodInEnclosure? "Yes" : "No");
         s += "\n# Group: " + category.name();
