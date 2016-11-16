@@ -5,16 +5,9 @@ public class Note {
     private String title, message;
     private long noteId, dateCreatedMilli;
     private Category category;
+    private boolean wasFed, hadFoodInEnclosure;
 
     public enum Category {GRIFFIN, LIAM, MASON, NKIMA}
-
-    public Note(String title, String message, Category category) {
-        this.title = title;
-        this.message = message;
-        this.category = category;
-        this.noteId = 0;
-        this.dateCreatedMilli = 0;
-    }
 
     public Note(String title, String message, Category category, long noteId, long dateCreatedMilli) {
         this.title = title;
@@ -22,6 +15,8 @@ public class Note {
         this.category = category;
         this.noteId = noteId;
         this.dateCreatedMilli = dateCreatedMilli;
+        this.wasFed = false;
+        this.hadFoodInEnclosure = false;
     }
 
     public String getTitle() {
@@ -40,19 +35,17 @@ public class Note {
         return noteId;
     }
 
-    public long getDateCreatedMilli() {
-        return dateCreatedMilli;
-    }
-
-
     public String toString() {
         String s = "";
 
-        s += "Note ID: " + noteId;
-        s += "\nTitle: " + title;
-        s += "\nMessage: " + message;
-        s += "\nCategory: " + category.name();
-        s += "\nDate: " + dateCreatedMilli;
+        s += "# Date and Time: " + title;
+        s += "\n# Observer: ";
+        s += "\n# Comments: ";
+        s += "\n# Fed: " + (wasFed? "Yes" : "No");
+        s += "\n# Food in Enclosure: " + (hadFoodInEnclosure? "Yes" : "No");
+        s += "\n# Group: " + category.name();
+        s += "\n# Data: \n";
+        s += message;
 
         return s;
     }
