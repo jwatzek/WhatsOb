@@ -4,20 +4,25 @@ package com.juliawatzek.whatsob;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class NoteCreateFragment extends Fragment {
 
@@ -28,6 +33,8 @@ public class NoteCreateFragment extends Fragment {
     private Note.Category savedButtonCategory;
     private AlertDialog categoryDialogObject;
     private Note note;
+    private Chronometer timer;
+    private boolean timestampNext = true;
 
     private static final String MODIFIED_CATEGORY = "Modified Category";
 
@@ -35,6 +42,14 @@ public class NoteCreateFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+    private String milliToMinSec (long timeInMillies) {
+        return String.format("%02d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(timeInMillies),
+                TimeUnit.MILLISECONDS.toSeconds(timeInMillies) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeInMillies))
+        );
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +69,7 @@ public class NoteCreateFragment extends Fragment {
         quickTextButtons = (LinearLayout) fragmentLayout.findViewById(R.id.quickTextButtons);
         Button enterButton = (Button) fragmentLayout.findViewById(R.id.createNote);
         Button startButton = (Button) fragmentLayout.findViewById(R.id.startButton);
+        timer = (Chronometer) fragmentLayout.findViewById(R.id.timer);
 
         // populate widgets with note data
         Intent intent = getActivity().getIntent();
@@ -65,7 +81,6 @@ public class NoteCreateFragment extends Fragment {
 
         // Get scrollview
         scroll = (ScrollView) fragmentLayout.findViewById(R.id.createScrollView);
-
 
         // if we came from our list fragment, get category from intent
         // otherwise (i.e., if we changed screen orientation), skip this and just set the image to
@@ -85,7 +100,28 @@ public class NoteCreateFragment extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: start timer
+                // start timer
+                timer.setBase(SystemClock.elapsedRealtime());
+                timer.start();
+
+                /*
+                // set 3min alarms
+                // TODO: add sounds, make snack bar
+                // TODO: figure out how to stop timer when navigated out of activity
+                new CountDownTimer(1800000 + 500, 180000) {
+
+                    public void onTick(long millisUntilFinished) {
+                            Toast.makeText(getActivity(), "SCAN TIME!", Toast.LENGTH_LONG).show();
+                    }
+
+                    public void onFinish() {
+                        Toast.makeText(getActivity(), "LAST SCAN!", Toast.LENGTH_LONG).show();
+                        this.cancel();
+                    }
+                }.start();
+                */
+
+                // TODO: On leaving screen, bring up confirm dialog. If really leaving, quit timer.
 
                 // first prompt
                 message.append("\u00BB  ");
@@ -106,6 +142,12 @@ public class NoteCreateFragment extends Fragment {
                 final Button id = (Button) view;
                 id.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
+                        if (timestampNext) {
+                            long elapsedMillis = SystemClock.elapsedRealtime() - timer.getBase();
+
+                            message.append(milliToMinSec(elapsedMillis) + " ");
+                            timestampNext = false;
+                        }
                         message.append(id.getText() + " ");
                     }
                 });
@@ -123,6 +165,13 @@ public class NoteCreateFragment extends Fragment {
                 final Button behav = (Button) view;
                 behav.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
+
+                        if (timestampNext) {
+                            long elapsedMillis = SystemClock.elapsedRealtime() - timer.getBase();
+
+                            message.append(milliToMinSec(elapsedMillis) + " ");
+                            timestampNext = false;
+                        }
                         message.append(behav.getText() + " ");
                     }
                 });
@@ -192,6 +241,9 @@ public class NoteCreateFragment extends Fragment {
         // add linebreak
         message.append("\n\u00BB  ");
 
+        // add timestamp next time a button is pressed?
+        timestampNext = true;
+
         // scroll to bottom?
         scroll.post(new Runnable() {
             @Override
@@ -214,4 +266,5 @@ public class NoteCreateFragment extends Fragment {
         dbAdapter.close();
 
     }
+
 }
