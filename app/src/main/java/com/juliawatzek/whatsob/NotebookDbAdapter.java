@@ -8,20 +8,24 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class NotebookDbAdapter {
 
     private static final String DATABASE_NAME = "whatsob.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String NOTE_TABLE = "note";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TITLE = "title";
     public static final String COLUMN_MESSAGE = "message";
     public static final String COLUMN_CATEGORY = "category";
+    public static final String COLUMN_OBSERVER = "observer";
+    public static final String COLUMN_COMMENTS = "comments";
+    public static final String COLUMN_WAS_FED = "wasFed";
+    public static final String COLUMN_HAD_FOOD_IN_ENCLOSURE = "hadFoodInEnclosure";
 
-    private String[] allColumns = { COLUMN_ID, COLUMN_TITLE, COLUMN_MESSAGE, COLUMN_CATEGORY };
+    private String[] allColumns = { COLUMN_ID, COLUMN_TITLE, COLUMN_MESSAGE, COLUMN_CATEGORY,
+            COLUMN_OBSERVER, COLUMN_COMMENTS, COLUMN_WAS_FED, COLUMN_HAD_FOOD_IN_ENCLOSURE};
 
     // SQL snippet
     public static final String CREATE_TABLE_NOTE = "create table " + NOTE_TABLE + " ( "
@@ -29,6 +33,10 @@ public class NotebookDbAdapter {
             + COLUMN_TITLE + " text not null, "
             + COLUMN_MESSAGE + " text not null, "
             + COLUMN_CATEGORY + " text not null, "
+            + COLUMN_OBSERVER + " text not null, "
+            + COLUMN_COMMENTS + " text not null, "
+            + COLUMN_WAS_FED + " integer not null, "
+            + COLUMN_HAD_FOOD_IN_ENCLOSURE + " integer not null "
             + " );";
 
     private SQLiteDatabase sqlDB;
@@ -50,11 +58,17 @@ public class NotebookDbAdapter {
         notebookDBHelper.close();
     }
 
-    public Note createNote(String title, String message, Note.Category category) {
+    public Note createNote(String title, String message, Note.Category category, String observer,
+                           String comments, boolean wasFed, boolean hadFoodInEnclosure) {
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
         values.put(COLUMN_MESSAGE, message);
         values.put(COLUMN_CATEGORY, category.name());
+        values.put(COLUMN_OBSERVER, observer);
+        values.put(COLUMN_COMMENTS, comments);
+        values.put(COLUMN_WAS_FED, wasFed);
+        values.put(COLUMN_HAD_FOOD_IN_ENCLOSURE, hadFoodInEnclosure);
 
         // insert the note we just created
         long insertId = sqlDB.insert(NOTE_TABLE, null, values);
@@ -75,11 +89,17 @@ public class NotebookDbAdapter {
         return sqlDB.delete(NOTE_TABLE, COLUMN_ID + " = " + idToDelete, null);
     }
 
-    public long updateNote(long idToUpdate, String newTitle, String newMessage, Note.Category newCategory) {
+    public long updateNote(long idToUpdate, String newTitle, String newMessage, Note.Category newCategory,
+                           String observer, String comments, boolean wasFed, boolean hadFoodInEnclosure) {
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, newTitle);
         values.put(COLUMN_MESSAGE, newMessage);
         values.put(COLUMN_CATEGORY, newCategory.name());
+        values.put(COLUMN_OBSERVER, observer);
+        values.put(COLUMN_COMMENTS, comments);
+        values.put(COLUMN_WAS_FED, wasFed? 1 : 0);
+        values.put(COLUMN_HAD_FOOD_IN_ENCLOSURE, hadFoodInEnclosure? 1 : 0);
 
         // look in note table where col id is same as id to update
         // when you find it, update with the values I gave you
@@ -104,7 +124,8 @@ public class NotebookDbAdapter {
 
     private Note cursorToNote (Cursor cursor) {
          Note newNote = new Note(cursor.getString(1), cursor.getString(2),
-                Note.Category.valueOf(cursor.getString(3)), cursor.getLong(0));
+                Note.Category.valueOf(cursor.getString(3)), cursor.getLong(0), cursor.getString(4),
+                 cursor.getString(5), cursor.getInt(6) == 1, cursor.getInt(7) == 1);
 
         return newNote;
     }

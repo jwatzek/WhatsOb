@@ -4,6 +4,7 @@ package com.juliawatzek.whatsob;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -11,12 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Chronometer;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -24,7 +27,8 @@ import java.util.concurrent.TimeUnit;
 
 public class NoteCreateFragment extends Fragment {
 
-    private TextView title, message;
+    private TextView title, message, observer, comments;
+    private CheckBox wasFed, hadFoodInEnclosure;
     private ImageButton noteCatButton;
     private Button enterButton, startButton;
     private LinearLayout quickTextButtons;
@@ -33,6 +37,7 @@ public class NoteCreateFragment extends Fragment {
     private AlertDialog categoryDialogObject, confirmDialogObject;
     private Note note;
     private Chronometer timer;
+    private CountDownTimer countdown;
     private boolean timestampNext = true;
     private boolean isStart = true;
 
@@ -66,6 +71,11 @@ public class NoteCreateFragment extends Fragment {
         title = (TextView) fragmentLayout.findViewById(R.id.createNoteTitle);
         message = (TextView) fragmentLayout.findViewById(R.id.createNoteMessage);
         noteCatButton = (ImageButton) fragmentLayout.findViewById(R.id.createNoteButton);
+        observer = (TextView) fragmentLayout.findViewById(R.id.createNoteObserver);
+        comments = (TextView) fragmentLayout.findViewById(R.id.createNoteComments);
+        wasFed = (CheckBox) fragmentLayout.findViewById(R.id.createWasFed);
+        hadFoodInEnclosure = (CheckBox) fragmentLayout.findViewById(R.id.createHadFoodInEnclosure);
+
         quickTextButtons = (LinearLayout) fragmentLayout.findViewById(R.id.quickTextButtons);
         enterButton = (Button) fragmentLayout.findViewById(R.id.createNote);
         startButton = (Button) fragmentLayout.findViewById(R.id.startButton);
@@ -114,11 +124,9 @@ public class NoteCreateFragment extends Fragment {
                     startButton.setText("Stop");
                     isStart = false;
 
-                    /*
                     // set 3min alarms
                     // TODO: add sounds, make snack bar
-                    // TODO: figure out how to stop timer when navigated out of activity
-                    new CountDownTimer(1800000 + 500, 180000) {
+                    countdown = new CountDownTimer(1800000 + 500, 180000) {
 
                         public void onTick(long millisUntilFinished) {
                                 Toast.makeText(getActivity(), "SCAN TIME!", Toast.LENGTH_LONG).show();
@@ -129,7 +137,6 @@ public class NoteCreateFragment extends Fragment {
                             this.cancel();
                         }
                     }.start();
-                    */
 
                     // first prompt
                     message.append("\u00BB  ");
@@ -139,6 +146,7 @@ public class NoteCreateFragment extends Fragment {
 
                 } else {
                     confirmDialogObject.show();
+                    countdown.cancel();
                 }
 
 
@@ -264,11 +272,15 @@ public class NoteCreateFragment extends Fragment {
 
                 if (note != null) {
                     // if there is a note, update it in database
-                    dbAdapter.updateNote(note.getNoteId(), title.getText() + "", message.getText() + "", note.getCategory());
+                    dbAdapter.updateNote(note.getNoteId(), title.getText() + "", message.getText() + "",
+                            note.getCategory(), note.getObserver(), note.getComments(), note.getWasFed(),
+                            note.getHasFoodInEnclosure());
                 } else {
                     // else, save as new note in our database
                     note = dbAdapter.createNote(title.getText() + "", message.getText() + "",
-                            (savedButtonCategory == null) ? Note.Category.GRIFFIN : savedButtonCategory);
+                            (savedButtonCategory == null) ? Note.Category.GRIFFIN : savedButtonCategory,
+                            observer.getText() + "", comments.getText() + "", wasFed.isChecked(),
+                            hadFoodInEnclosure.isChecked());
                 }
 
                 dbAdapter.close();
@@ -310,11 +322,15 @@ public class NoteCreateFragment extends Fragment {
 
         if (note != null) {
             // if there is a note, update it in database
-            dbAdapter.updateNote(note.getNoteId(), title.getText() + "", message.getText() + "", note.getCategory());
+            dbAdapter.updateNote(note.getNoteId(), title.getText() + "", message.getText() + "", note.getCategory(),
+                    observer.getText() + "", comments.getText() + "", wasFed.isChecked(),
+                    hadFoodInEnclosure.isChecked());
         } else {
             // else, save as new note in our database
             note = dbAdapter.createNote(title.getText() + "", message.getText() + "",
-                    (savedButtonCategory == null) ? Note.Category.GRIFFIN : savedButtonCategory);
+                    (savedButtonCategory == null) ? Note.Category.GRIFFIN : savedButtonCategory,
+                    observer.getText() + "", comments.getText() + "", wasFed.isChecked(),
+                    hadFoodInEnclosure.isChecked());
         }
         dbAdapter.close();
 

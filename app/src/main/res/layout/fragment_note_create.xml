@@ -72,11 +72,13 @@
         android:orientation="vertical">
 
         <CheckBox
+            android:id="@+id/createWasFed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fed" />
 
         <CheckBox
+            android:id="@+id/createHadFoodInEnclosure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Food in enclosure" />

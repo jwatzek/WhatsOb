@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -23,7 +24,8 @@ import static android.R.id.message;
 public class NoteEditFragment extends Fragment {
 
     private TextView title;
-    private EditText message;
+    private EditText message, observer, comments;
+    private CheckBox wasFed, hadFoodInEnclosure;
     private ImageButton noteCatButton;
     private Note.Category savedButtonCategory;
     private AlertDialog categoryDialogObject, confirmDialogObject;
@@ -52,6 +54,10 @@ public class NoteEditFragment extends Fragment {
         message = (EditText) fragmentLayout.findViewById(R.id.editNoteMessage);
         noteCatButton = (ImageButton) fragmentLayout.findViewById(R.id.editNoteButton);
         Button saveButton = (Button) fragmentLayout.findViewById(R.id.saveNote);
+        observer = (EditText) fragmentLayout.findViewById(R.id.editNoteObserver);
+        comments = (EditText) fragmentLayout.findViewById(R.id.editNoteComments);
+        wasFed = (CheckBox) fragmentLayout.findViewById(R.id.editWasFed);
+        hadFoodInEnclosure = (CheckBox) fragmentLayout.findViewById(R.id.editHadFoodInEnclosure);
 
         // populate widgets with note data
         Intent intent = getActivity().getIntent();
@@ -59,6 +65,7 @@ public class NoteEditFragment extends Fragment {
         title.setText(intent.getExtras().getString(MainActivity.NOTE_TITLE_EXTRA, ""));
         message.setText(intent.getExtras().getString(MainActivity.NOTE_MESSAGE_EXTRA, ""));
         noteId = intent.getExtras().getLong(MainActivity.NOTE_ID_EXTRA, 0);
+        // TODO: populate the intent data
 
         // if we came from our list fragment, get category from intent
         // otherwise (i.e., if we changed screen orientation), skip this and just set the image to
@@ -149,7 +156,8 @@ public class NoteEditFragment extends Fragment {
 
                 // update note in database
                 dbAdapter.updateNote(noteId, title.getText() + "", message.getText() + "",
-                        savedButtonCategory);
+                        savedButtonCategory, observer.getText() + "", comments.getText() + "", wasFed.isChecked(),
+                        hadFoodInEnclosure.isChecked());
 
                 dbAdapter.close();
                 Intent intent = new Intent(getActivity(), MainActivity.class);

@@ -9,17 +9,6 @@ public class Note {
 
     public enum Category {GRIFFIN, LIAM, MASON, NKIMA}
 
-    public Note(String title, String message, Category category, long noteId) {
-        this.title = title;
-        this.message = message;
-        this.category = category;
-        this.noteId = noteId;
-        this.observer = "";
-        this.comments = "";
-        this.wasFed = false;
-        this.hadFoodInEnclosure = false;
-    }
-
     public Note(String title, String message, Category category, long noteId, String observer,
                 String comments, boolean wasFed, boolean hasFoodInEnclosure) {
         this.title = title;

@@ -31,7 +31,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/note_observer"
+            android:id="@+id/editNoteObserver"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Observer / Coder"
@@ -39,7 +39,7 @@
             android:textAppearance="?android:textAppearanceSmall" />
 
         <EditText
-            android:id="@+id/note_comments"
+            android:id="@+id/editNoteComments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Comments"
@@ -58,11 +58,13 @@
         android:orientation="vertical">
 
         <CheckBox
+            android:id="@+id/editWasFed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fed" />
 
         <CheckBox
+            android:id="@+id/editHadFoodInEnclosure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Food in enclosure" />
