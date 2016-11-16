@@ -117,7 +117,7 @@
             android:gravity="top"
             android:lineSpacingMultiplier="1.5"
             android:padding="8dp"
-            android:text="Observation data"
+            android:text="Observation Data"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@android:color/black" />
 

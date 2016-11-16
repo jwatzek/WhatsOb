@@ -42,8 +42,8 @@ public class NoteAdapter extends ArrayAdapter<Note> {
             // set our views to our view holder so that we no longer have to go back and use find view
             // by id every time we have a new row -- jw: save references to later populate them with
             // specific note row data
-            viewHolder.noteTitle = (TextView) convertView.findViewById(R.id.listItemNoteTitle);
-            viewHolder.noteText = (TextView) convertView.findViewById(R.id.listItemNoteText);
+            viewHolder.noteTitle = (TextView) convertView.findViewById(R.id.listItemNoteDate);
+            viewHolder.noteText = (TextView) convertView.findViewById(R.id.listItemNoteObserver);
             viewHolder.noteIcon = (ImageView) convertView.findViewById(R.id.listItemNoteImg);
 
             // use set tag to remember our view holder, which is holding the references to our widgets

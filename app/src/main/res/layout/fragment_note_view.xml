@@ -1,10 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
-    android:paddingEnd="10dp"
-    android:paddingStart="12dp"
-    android:paddingTop="10dp">
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/viewNoteIcon"
@@ -14,49 +11,102 @@
         android:scaleType="fitCenter"
         android:src="@drawable/g" />
 
-    <ScrollView
-        android:id="@+id/noteScrollView"
+    <LinearLayout
+        android:id="@+id/viewNoteView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/viewNoteIcon"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@id/viewNoteIcon">
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@id/viewNoteIcon"
+        android:layout_toStartOf="@+id/viewFoodChecks"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/viewNoteTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Note Title"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="11/7/2016 09:15 AM"
+
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-    </ScrollView>
+        <TextView
+            android:id="@+id/viewNoteObserver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingTop="10dp"
+            android:text="Observer / Coder"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/viewNoteComments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:paddingBottom="8dp"
+            android:paddingTop="10dp"
+            android:text="Comments"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@id/viewFoodChecks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editNoteView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="32dp"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Fed" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Food in enclosure" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="40dp" />
+
+
+    </LinearLayout>
+
 
     <View
         android:id="@+id/viewSeparator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/noteScrollView"
+        android:layout_below="@id/viewNoteView"
         android:layout_margin="8dp"
         android:background="@android:color/darker_gray" />
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/noteScrollView"
-        android:layout_marginTop="16dp">
+        android:layout_below="@id/viewSeparator">
 
         <TextView
             android:id="@+id/viewNoteMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top"
             android:lineSpacingMultiplier="1.5"
-            android:text="Observation"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:padding="8dp"
+            android:text="Observation Data"
+            android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@android:color/black" />
 
     </ScrollView>

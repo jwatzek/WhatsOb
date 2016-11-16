@@ -1,10 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
-    android:paddingEnd="10dp"
-    android:paddingStart="12dp"
-    android:paddingTop="10dp">
+    android:padding="16dp">
 
     <ImageButton
         android:id="@+id/editNoteButton"
@@ -19,6 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
         android:layout_toEndOf="@id/editNoteButton"
         android:layout_toStartOf="@+id/food_checkboxes"
         android:orientation="vertical">
@@ -28,7 +26,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="11/7/2016 09:15 AM"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/note_observer"

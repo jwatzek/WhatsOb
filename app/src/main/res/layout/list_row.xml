@@ -16,7 +16,7 @@
         android:src="@drawable/g" />
 
     <TextView
-        android:id="@+id/listItemNoteTitle"
+        android:id="@+id/listItemNoteDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
@@ -28,13 +28,13 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/listItemNoteText"
+        android:id="@+id/listItemNoteObserver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/listItemNoteTitle"
+        android:layout_below="@id/listItemNoteDate"
         android:layout_toEndOf="@+id/listItemNoteImg"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="So this is how our note text should look, it's not pretty but I think it should do" />
+        android:text="Observer: " />
 
 </RelativeLayout>
