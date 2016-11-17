@@ -233,6 +233,7 @@
                 android:text="Feed" />
 
             <Button
+                android:id="@+id/shareButton"
                 android:layout_height="56dp"
                 android:layout_gravity="fill_horizontal"
                 android:minWidth="120dp"
@@ -277,10 +278,11 @@
                 android:text="Abnormal" />
 
             <Button
+                android:id="@+id/otherButton"
                 android:layout_height="56dp"
                 android:layout_gravity="fill_horizontal"
                 android:minWidth="120dp"
-                android:text="Other+" />
+                android:text="Note+" />
 
             <Button
                 android:id="@+id/createNote"

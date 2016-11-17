@@ -1,6 +1,6 @@
 package com.juliawatzek.whatsob;
 
-
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -12,9 +12,11 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -31,16 +33,18 @@ public class NoteCreateFragment extends Fragment {
     private TextView title, message, observer, comments;
     private CheckBox wasFed, hadFoodInEnclosure;
     private ImageButton noteCatButton;
-    private Button enterButton, startButton;
+    private Button enterButton, startButton, shareButton, noteButton;
     private LinearLayout quickTextButtons;
     private ScrollView scroll;
     private Note.Category savedButtonCategory;
-    private AlertDialog categoryDialogObject, confirmDialogObject;
+    private AlertDialog categoryDialogObject, confirmDialogObject, shareDialogObject, noteDialogObject;
     private Note note;
     private Chronometer timer;
     private CountDownTimer countdown;
     private boolean timestampNext = true;
     private boolean isStart = true;
+    private String share;
+    private InputMethodManager imm;
 
     private static final String MODIFIED_CATEGORY = "Modified Category";
 
@@ -79,8 +83,13 @@ public class NoteCreateFragment extends Fragment {
 
         quickTextButtons = (LinearLayout) fragmentLayout.findViewById(R.id.quickTextButtons);
         enterButton = (Button) fragmentLayout.findViewById(R.id.createNote);
+        shareButton = (Button) fragmentLayout.findViewById(R.id.shareButton);
+        noteButton = (Button) fragmentLayout.findViewById(R.id.otherButton);
         startButton = (Button) fragmentLayout.findViewById(R.id.startButton);
         timer = (Chronometer) fragmentLayout.findViewById(R.id.timer);
+
+        // get input manager for soft keyboard
+        imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
         // populate widgets with note data
         Intent intent = getActivity().getIntent();
@@ -102,6 +111,8 @@ public class NoteCreateFragment extends Fragment {
 
         buildCategoryDialog();
         buildConfirmDialog();
+        buildShareDialog();
+        buildNoteDialog();
 
         noteCatButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,6 +128,9 @@ public class NoteCreateFragment extends Fragment {
                 // TODO: On leaving screen, bring up confirm dialog. If really leaving, quit timer.
 
                 if (isStart) {
+                    // hide soft keyboard
+                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
                     // start timer
                     timer.setBase(SystemClock.elapsedRealtime());
                     timer.start();
@@ -133,8 +147,8 @@ public class NoteCreateFragment extends Fragment {
                     countdown = new CountDownTimer(1800000 + 500, 180000) {
 
                         public void onTick(long millisUntilFinished) {
-                                Toast.makeText(getActivity(), "SCAN TIME!", Toast.LENGTH_LONG).show();
-                                mp.start();
+                            Toast.makeText(getActivity(), "SCAN TIME!", Toast.LENGTH_LONG).show();
+                            mp.start();
                         }
 
                         public void onFinish() {
@@ -215,6 +229,21 @@ public class NoteCreateFragment extends Fragment {
             }
         });
 
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareDialogObject.show();
+            }
+        });
+
+        noteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noteDialogObject.show();
+            }
+        });
+
+
         return fragmentLayout;
     }
 
@@ -224,6 +253,93 @@ public class NoteCreateFragment extends Fragment {
 
         savedInstanceState.putSerializable(MODIFIED_CATEGORY, savedButtonCategory);
         // TODO: Save visibility of quick-text buttons + message etc.! Everything that gets overwritten or reset on onCreate.
+    }
+
+    private void buildShareDialog() {
+
+        final String[] sharing = new String[]{"Active-Share", "Passive-Share", "Cofeed", "Beg"};
+
+        AlertDialog.Builder shareBuilder = new AlertDialog.Builder(getActivity());
+        shareBuilder.setTitle("Choose Behavior");
+
+        shareBuilder.setSingleChoiceItems(sharing, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                // dismisses dialog window
+                shareDialogObject.cancel();
+
+                switch (item) {
+                    case 0:
+                        share = "Active-Share";
+                        break;
+                    case 1:
+                        share = "Passive-Share";
+                        break;
+                    case 2:
+                        share = "Cofeed";
+                        break;
+                    case 3:
+                        share = "Beg";
+                        break;
+                }
+
+                if (timestampNext) {
+                    long elapsedMillis = SystemClock.elapsedRealtime() - timer.getBase();
+
+                    message.append(milliToMinSec(elapsedMillis) + " ");
+                    timestampNext = false;
+                }
+
+                message.append(share + " ");
+
+            }
+        });
+        shareDialogObject = shareBuilder.create();
+    }
+
+
+    private void buildNoteDialog() {
+
+        AlertDialog.Builder noteBuilder = new AlertDialog.Builder(getActivity());
+        noteBuilder.setTitle("Write a Comment");
+
+        final EditText input = new EditText(getActivity());
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+
+        input.setLayoutParams(lp);
+        noteBuilder.setView(input);
+
+        noteBuilder.setPositiveButton("Enter", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                message.append("# " + input.getText());
+                enterDataRow();
+
+                input.setText("");
+
+                // hide soft keyboard
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+            }
+        });
+
+        noteBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                input.setText("");
+
+                // hide soft keyboard
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+            }
+        });
+        noteDialogObject = noteBuilder.create();
+
     }
 
 
