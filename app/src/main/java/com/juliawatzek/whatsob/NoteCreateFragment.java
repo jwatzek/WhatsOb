@@ -3,6 +3,7 @@ package com.juliawatzek.whatsob;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
@@ -124,16 +125,22 @@ public class NoteCreateFragment extends Fragment {
                     startButton.setText("Stop");
                     isStart = false;
 
+                    // sound
+                    final MediaPlayer mp = MediaPlayer.create(getActivity(), R.raw.correct_a_tone);
+
                     // set 3min alarms
-                    // TODO: add sounds, make snack bar
+                    // TODO: Make this a Snackbar instead?
                     countdown = new CountDownTimer(1800000 + 500, 180000) {
 
                         public void onTick(long millisUntilFinished) {
                                 Toast.makeText(getActivity(), "SCAN TIME!", Toast.LENGTH_LONG).show();
+                                mp.start();
                         }
 
                         public void onFinish() {
                             Toast.makeText(getActivity(), "LAST SCAN!", Toast.LENGTH_LONG).show();
+
+                            mp.start();
                             this.cancel();
                         }
                     }.start();

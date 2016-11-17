@@ -54,15 +54,16 @@ public class Note {
     }
 
     public void prepStrings() {
-        preamble  = "# Date and Time: " + title;
+        preamble = "# Date and Time: " + title;
         preamble += "\n# Observer: " + observer;
         preamble += "\n# Comments: " + comments;
         preamble += "\n# Fed: " + (wasFed ? "Yes" : "No");
         preamble += "\n# Food in Enclosure: " + (hadFoodInEnclosure ? "Yes" : "No");
         preamble += "\n# Group: " + category.name();
-        preamble += "\n# Data: \n";
+        preamble += "\n# Data: \n#\n";
 
-        newMsg = message.replace("\u00BB  ", "").replace(" \n", "\n");
+        newMsg = "Timestamp IndividualA Behavior IndividualB\n";
+        newMsg += message.replace("\u00BB  ", "").replace(" \n", "\n");
     }
 
     public String toString() {
