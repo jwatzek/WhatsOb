@@ -20,6 +20,10 @@ public class MainActivity extends AppCompatActivity {
     public static final String NOTE_TITLE_EXTRA = "com.juliawatzek.whatsob.Title";
     public static final String NOTE_MESSAGE_EXTRA = "com.juliawatzek.whatsob.Message";
     public static final String NOTE_CATEGORY_EXTRA = "com.juliawatzek.whatsob.Category";
+    public static final String NOTE_OBSERVER_EXTRA = "com.juliawatzek.whatsob.Observer";
+    public static final String NOTE_COMMENTS_EXTRA = "com.juliawatzek.whatsob.Comments";
+    public static final String NOTE_WAS_FED_EXTRA = "com.juliawatzek.whatsob.WasFed";
+    public static final String NOTE_HAD_FOOD_IN_ENCLOSURE_EXTRA = "com.juliawatzek.whatsob.HadFoodInEnclosure";
     public static final String NOTE_FRAGMENT_TO_LOAD_EXTRA = "com.juliawatzek.whatsob.FragmentToLoad";
 
     public enum FragmentToLaunch {VIEW, EDIT, CREATE}

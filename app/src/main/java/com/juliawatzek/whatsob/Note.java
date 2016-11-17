@@ -2,7 +2,7 @@ package com.juliawatzek.whatsob;
 
 
 public class Note {
-    private String title, message, observer, comments;
+    private String title, message, observer, comments, preamble, newMsg;
     private long noteId;
     private Category category;
     private boolean wasFed, hadFoodInEnclosure;
@@ -38,7 +38,7 @@ public class Note {
     }
 
     public String getObserver() {
-        return "Observer: " + observer;
+        return observer;
     }
 
     public String getComments() {
@@ -49,31 +49,38 @@ public class Note {
         return wasFed;
     }
 
-    public boolean getHasFoodInEnclosure() {
-        return wasFed;
+    public boolean getHadFoodInEnclosure() {
+        return hadFoodInEnclosure;
+    }
+
+    public void prepStrings() {
+        preamble  = "# Date and Time: " + title;
+        preamble += "\n# Observer: " + observer;
+        preamble += "\n# Comments: " + comments;
+        preamble += "\n# Fed: " + (wasFed ? "Yes" : "No");
+        preamble += "\n# Food in Enclosure: " + (hadFoodInEnclosure ? "Yes" : "No");
+        preamble += "\n# Group: " + category.name();
+        preamble += "\n# Data: \n";
+
+        newMsg = message.replace("\u00BB  ", "").replace(" \n", "\n");
     }
 
     public String toString() {
-        String s = "";
-
-        s += "# Date and Time: " + title;
-        s += "\n# Observer: " + observer;
-        s += "\n# Comments: " + comments;
-        s += "\n# Fed: " + (wasFed? "Yes" : "No");
-        s += "\n# Food in Enclosure: " + (hadFoodInEnclosure? "Yes" : "No");
-        s += "\n# Group: " + category.name();
-        s += "\n# Data: \n";
-        s += message;
-
-        return s;
+        prepStrings();
+        return preamble + newMsg;
     }
 
-    public int getAssociatedDrawable(){
+    public String toCSVString() {
+        prepStrings();
+        return preamble + newMsg.replace(" ", ", ");
+    }
+
+    public int getAssociatedDrawable() {
         return categoryToDrawable(category);
     }
 
     public static int categoryToDrawable(Category noteCategory) {
-        switch (noteCategory){
+        switch (noteCategory) {
             case GRIFFIN:
                 return R.drawable.g;
             case LIAM:

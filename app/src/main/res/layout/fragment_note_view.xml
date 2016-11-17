@@ -64,12 +64,14 @@
         android:orientation="vertical">
 
         <CheckBox
+            android:id="@+id/viewWasFed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:text="Fed" />
 
         <CheckBox
+            android:id="@+id/viewHadFoodInEnclosure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"

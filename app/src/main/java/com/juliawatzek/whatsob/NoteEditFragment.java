@@ -65,7 +65,10 @@ public class NoteEditFragment extends Fragment {
         title.setText(intent.getExtras().getString(MainActivity.NOTE_TITLE_EXTRA, ""));
         message.setText(intent.getExtras().getString(MainActivity.NOTE_MESSAGE_EXTRA, ""));
         noteId = intent.getExtras().getLong(MainActivity.NOTE_ID_EXTRA, 0);
-        // TODO: populate the intent data
+        observer.setText(intent.getExtras().getString(MainActivity.NOTE_OBSERVER_EXTRA));
+        comments.setText(intent.getExtras().getString(MainActivity.NOTE_COMMENTS_EXTRA));
+        wasFed.setChecked(intent.getExtras().getBoolean(MainActivity.NOTE_WAS_FED_EXTRA));
+        hadFoodInEnclosure.setChecked(intent.getExtras().getBoolean(MainActivity.NOTE_HAD_FOOD_IN_ENCLOSURE_EXTRA));
 
         // if we came from our list fragment, get category from intent
         // otherwise (i.e., if we changed screen orientation), skip this and just set the image to

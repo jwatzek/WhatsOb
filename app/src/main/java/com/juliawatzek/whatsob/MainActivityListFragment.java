@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+
+import static com.juliawatzek.whatsob.R.drawable.n;
 
 public class MainActivityListFragment extends ListFragment {
 
@@ -77,14 +79,13 @@ public class MainActivityListFragment extends ListFragment {
 
                 Intent intent = new Intent(Intent.ACTION_SEND);
 
-                // TODO: format data accordingly
                 if (isFormatCSV) {
                     intent.setType("text/csv");
+                    intent.putExtra(Intent.EXTRA_TEXT, note.toCSVString());
                 } else {
                     intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_TEXT, note + "");
                 }
-
-                intent.putExtra(Intent.EXTRA_TEXT, note + "");
 
                 startActivity(Intent.createChooser(intent, getResources().getText(R.string.send_to)));
                 return true;
@@ -149,6 +150,10 @@ public class MainActivityListFragment extends ListFragment {
         intent.putExtra(MainActivity.NOTE_MESSAGE_EXTRA, note.getMessage());
         intent.putExtra(MainActivity.NOTE_CATEGORY_EXTRA, note.getCategory());
         intent.putExtra(MainActivity.NOTE_ID_EXTRA, note.getNoteId());
+        intent.putExtra(MainActivity.NOTE_OBSERVER_EXTRA, note.getObserver());
+        intent.putExtra(MainActivity.NOTE_COMMENTS_EXTRA, note.getComments());
+        intent.putExtra(MainActivity.NOTE_WAS_FED_EXTRA, note.getWasFed());
+        intent.putExtra(MainActivity.NOTE_HAD_FOOD_IN_ENCLOSURE_EXTRA, note.getHadFoodInEnclosure());
 
         switch (ftl) {
             case VIEW:

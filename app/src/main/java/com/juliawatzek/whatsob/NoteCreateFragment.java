@@ -274,7 +274,7 @@ public class NoteCreateFragment extends Fragment {
                     // if there is a note, update it in database
                     dbAdapter.updateNote(note.getNoteId(), title.getText() + "", message.getText() + "",
                             note.getCategory(), note.getObserver(), note.getComments(), note.getWasFed(),
-                            note.getHasFoodInEnclosure());
+                            note.getHadFoodInEnclosure());
                 } else {
                     // else, save as new note in our database
                     note = dbAdapter.createNote(title.getText() + "", message.getText() + "",
