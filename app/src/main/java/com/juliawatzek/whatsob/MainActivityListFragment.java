@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -18,6 +19,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import static com.juliawatzek.whatsob.MainActivity.REQUEST_EXIT;
 import static com.juliawatzek.whatsob.R.drawable.n;
 
 public class MainActivityListFragment extends ListFragment {
@@ -74,18 +76,16 @@ public class MainActivityListFragment extends ListFragment {
 
             case R.id.share:
 
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                boolean isFormatCSV = sharedPreferences.getBoolean("file_format", false);
+//                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//                boolean isFormatCSV = sharedPreferences.getBoolean("file_format", false);
 
                 Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, note + "");
 
-                if (isFormatCSV) {
-                    intent.setType("text/csv");
-                    intent.putExtra(Intent.EXTRA_TEXT, note.toCSVString());
-                } else {
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, note + "");
-                }
+//                if (isFormatCSV) {
+//                    intent.putExtra(Intent.EXTRA_TEXT, note.toCSVString());
+//                } else { }
 
                 startActivity(Intent.createChooser(intent, getResources().getText(R.string.send_to)));
                 return true;
@@ -158,13 +158,15 @@ public class MainActivityListFragment extends ListFragment {
         switch (ftl) {
             case VIEW:
                 intent.putExtra(MainActivity.NOTE_FRAGMENT_TO_LOAD_EXTRA, MainActivity.FragmentToLaunch.VIEW);
+                startActivity(intent);
                 break;
             case EDIT:
                 intent.putExtra(MainActivity.NOTE_FRAGMENT_TO_LOAD_EXTRA, MainActivity.FragmentToLaunch.EDIT);
+                startActivity(intent);
                 break;
         }
 
-        startActivity(intent);
+
     }
 
 }

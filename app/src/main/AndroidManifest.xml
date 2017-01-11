@@ -11,6 +11,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,11 +21,14 @@
         </activity>
         <activity
             android:name=".NoteDetailActivity"
-            android:label="@string/edit_fragment_title"></activity>
+            android:parentActivityName=".MainActivity"
+            android:label="@string/edit_fragment_title"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".AppPreferences"
             android:label="@string/preferences_title"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

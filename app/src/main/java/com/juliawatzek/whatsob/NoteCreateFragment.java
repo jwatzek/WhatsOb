@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -175,7 +176,7 @@ public class NoteCreateFragment extends Fragment {
         });
 
         // attach onClickListeners to all ID buttons 
-        LinearLayout individuals = (LinearLayout) fragmentLayout.findViewById(R.id.layoutIds);
+        GridLayout individuals = (GridLayout) fragmentLayout.findViewById(R.id.layoutIds);
         int idCount = individuals.getChildCount();
 
         for (int i = 0; i < idCount; i++) {
@@ -255,6 +256,8 @@ public class NoteCreateFragment extends Fragment {
         // TODO: Save visibility of quick-text buttons + message etc.! Everything that gets overwritten or reset on onCreate.
     }
 
+
+
     private void buildShareDialog() {
 
         final String[] sharing = new String[]{"Active-Share", "Passive-Share", "Cofeed", "Beg"};
@@ -317,7 +320,7 @@ public class NoteCreateFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                message.append("# " + input.getText());
+                message.append(("# " + input.getText()).replace(" ", "\u00A0"));
                 enterDataRow();
 
                 input.setText("");
@@ -408,6 +411,7 @@ public class NoteCreateFragment extends Fragment {
 
                 dbAdapter.close();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });

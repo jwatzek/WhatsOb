@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 public class NoteDetailActivity extends AppCompatActivity {
 
+    boolean suppressBackPressed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,7 @@ public class NoteDetailActivity extends AppCompatActivity {
                 // create and add new note edit fragment (with tag, in case we want to retrieve it)
                 NoteCreateFragment noteCreateFragment = new NoteCreateFragment();
                 setTitle(R.string.create_fragment_title);
+                suppressBackPressed = true;
                 fragmentTransaction.add(R.id.note_container, noteCreateFragment, "NOTE_CREATE_FRAGMENT");
                 break;
         }
@@ -54,6 +57,13 @@ public class NoteDetailActivity extends AppCompatActivity {
         // commit changes to make sure the above actually happens
         fragmentTransaction.commit();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!suppressBackPressed) {
+            super.onBackPressed();
+        }
     }
 
 }

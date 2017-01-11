@@ -164,6 +164,7 @@ public class NoteEditFragment extends Fragment {
 
                 dbAdapter.close();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });

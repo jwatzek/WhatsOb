@@ -141,13 +141,14 @@
         android:gravity="center_horizontal"
         android:visibility="gone">
 
-        <LinearLayout
+        <GridLayout
             android:id="@+id/layoutIds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="24dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:rowCount="6">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -160,34 +161,67 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
-                android:minWidth="120dp"
-                android:text="Griffin" />
+                android:minWidth="90dp"
+                android:text="Mason" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
-                android:minWidth="120dp"
-                android:text="Lily" />
+                android:minWidth="90dp"
+                android:text="Mango" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
-                android:minWidth="120dp"
-                android:text="Lexi" />
+                android:minWidth="90dp"
+                android:text="Scarlett" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
-                android:minWidth="120dp"
-                android:text="Widget" />
+                android:minWidth="90dp"
+                android:text="Star" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="56dp"
-                android:minWidth="120dp"
-                android:text="Wren" />
+                android:minWidth="90dp"
+                android:text="Bias" />
 
-        </LinearLayout>
+            <Space />
+
+            <Button
+                android:layout_height="56dp"
+                android:layout_gravity="fill_horizontal"
+                android:minWidth="90dp"
+                android:text="Benny" />
+
+            <Button
+                android:layout_height="56dp"
+                android:layout_gravity="fill_horizontal"
+                android:minWidth="90dp"
+                android:text="Bailey" />
+
+            <Button
+                android:layout_height="56dp"
+                android:layout_gravity="fill_horizontal"
+                android:minWidth="90dp"
+                android:text="Beeker" />
+
+            <Button
+                android:layout_height="56dp"
+                android:layout_gravity="fill_horizontal"
+                android:minWidth="90dp"
+                android:text="Gonzo" />
+
+            <Button
+                android:layout_height="56dp"
+                android:layout_gravity="fill_horizontal"
+                android:minWidth="90dp"
+                android:text="Gretel" />
+
+
+        </GridLayout>
 
         <GridLayout
             android:id="@+id/layoutBehavs"

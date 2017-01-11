@@ -53,7 +53,7 @@ public class Note {
         return hadFoodInEnclosure;
     }
 
-    public void prepStrings() {
+    public String toString() {
         preamble = "# Date and Time: " + title;
         preamble += "\n# Observer: " + observer;
         preamble += "\n# Comments: " + comments;
@@ -64,16 +64,8 @@ public class Note {
 
         newMsg = "Timestamp IndividualA Behavior IndividualB\n";
         newMsg += message.replace("\u00BB  ", "").replace(" \n", "\n");
-    }
 
-    public String toString() {
-        prepStrings();
         return preamble + newMsg;
-    }
-
-    public String toCSVString() {
-        prepStrings();
-        return preamble + newMsg.replace(" ", ", ");
     }
 
     public int getAssociatedDrawable() {

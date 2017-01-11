@@ -10,14 +10,14 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Export">
+    <!--<PreferenceCategory android:title="Export">-->
 
-        <CheckBoxPreference
-            android:title="File Format"
-            android:summary="Export file as CSV instead of plain text?"
-            android:key="file_format"
-            android:defaultValue="false" />
+        <!--<CheckBoxPreference-->
+            <!--android:title="File Format"-->
+            <!--android:summary="Export file as CSV instead of plain text?"-->
+            <!--android:key="file_format"-->
+            <!--android:defaultValue="false" />-->
 
-    </PreferenceCategory>
+    <!--</PreferenceCategory>-->
 
 </PreferenceScreen>
