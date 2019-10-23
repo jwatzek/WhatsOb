@@ -18,8 +18,12 @@
 
     <!-- Fragment Widget Strings -->
     <string name="enter_button">Enter</string>
+    <string name="stop_button">Stop</string>
 
     <!-- Share Dialog -->
     <string name="send_to">Send file using</string>
+
+    <!-- Notebook title -->
+    <string name="nb_title">WhatsOb</string>
 
 </resources>

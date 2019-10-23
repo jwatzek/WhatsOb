@@ -81,6 +81,7 @@ public class MainActivityListFragment extends ListFragment {
 
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_SUBJECT, note.getTitle());
                 intent.putExtra(Intent.EXTRA_TEXT, note + "");
 
 //                if (isFormatCSV) {
@@ -151,6 +152,7 @@ public class MainActivityListFragment extends ListFragment {
         intent.putExtra(MainActivity.NOTE_CATEGORY_EXTRA, note.getCategory());
         intent.putExtra(MainActivity.NOTE_ID_EXTRA, note.getNoteId());
         intent.putExtra(MainActivity.NOTE_OBSERVER_EXTRA, note.getObserver());
+        intent.putExtra(MainActivity.NOTE_ESTROUS_EXTRA, note.getEstrous());
         intent.putExtra(MainActivity.NOTE_COMMENTS_EXTRA, note.getComments());
         intent.putExtra(MainActivity.NOTE_WAS_FED_EXTRA, note.getWasFed());
         intent.putExtra(MainActivity.NOTE_HAD_FOOD_IN_ENCLOSURE_EXTRA, note.getHadFoodInEnclosure());

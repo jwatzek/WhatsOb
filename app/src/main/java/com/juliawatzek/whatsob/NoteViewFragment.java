@@ -33,6 +33,7 @@ public class NoteViewFragment extends Fragment {
         ImageView icon = (ImageView) fragmentLayout.findViewById(R.id.viewNoteIcon);
 
         TextView observer = (TextView) fragmentLayout.findViewById(R.id.viewNoteObserver);
+        TextView estrous = (TextView) fragmentLayout.findViewById(R.id.viewNoteEstrous);
         TextView comments = (TextView) fragmentLayout.findViewById(R.id.viewNoteComments);
         CheckBox wasFed = (CheckBox) fragmentLayout.findViewById(R.id.viewWasFed);
         CheckBox hadFoodInEnclosure = (CheckBox) fragmentLayout.findViewById(R.id.viewHadFoodInEnclosure);
@@ -46,6 +47,7 @@ public class NoteViewFragment extends Fragment {
         icon.setImageResource(Note.categoryToDrawable(noteCat));
 
         observer.setText(intent.getExtras().getString(MainActivity.NOTE_OBSERVER_EXTRA));
+        estrous.setText(intent.getExtras().getString(MainActivity.NOTE_ESTROUS_EXTRA));
         comments.setText(intent.getExtras().getString(MainActivity.NOTE_COMMENTS_EXTRA));
         wasFed.setChecked(intent.getExtras().getBoolean(MainActivity.NOTE_WAS_FED_EXTRA));
         hadFoodInEnclosure.setChecked(intent.getExtras().getBoolean(MainActivity.NOTE_HAD_FOOD_IN_ENCLOSURE_EXTRA));

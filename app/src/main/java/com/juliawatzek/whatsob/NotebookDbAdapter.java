@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class NotebookDbAdapter {
 
     private static final String DATABASE_NAME = "whatsob.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public static final String NOTE_TABLE = "note";
     public static final String COLUMN_ID = "_id";
@@ -20,12 +20,13 @@ public class NotebookDbAdapter {
     public static final String COLUMN_MESSAGE = "message";
     public static final String COLUMN_CATEGORY = "category";
     public static final String COLUMN_OBSERVER = "observer";
+    public static final String COLUMN_ESTROUS = "estrous";
     public static final String COLUMN_COMMENTS = "comments";
     public static final String COLUMN_WAS_FED = "wasFed";
     public static final String COLUMN_HAD_FOOD_IN_ENCLOSURE = "hadFoodInEnclosure";
 
     private String[] allColumns = { COLUMN_ID, COLUMN_TITLE, COLUMN_MESSAGE, COLUMN_CATEGORY,
-            COLUMN_OBSERVER, COLUMN_COMMENTS, COLUMN_WAS_FED, COLUMN_HAD_FOOD_IN_ENCLOSURE};
+            COLUMN_OBSERVER, COLUMN_ESTROUS, COLUMN_COMMENTS, COLUMN_WAS_FED, COLUMN_HAD_FOOD_IN_ENCLOSURE};
 
     // SQL snippet
     public static final String CREATE_TABLE_NOTE = "create table " + NOTE_TABLE + " ( "
@@ -34,6 +35,7 @@ public class NotebookDbAdapter {
             + COLUMN_MESSAGE + " text not null, "
             + COLUMN_CATEGORY + " text not null, "
             + COLUMN_OBSERVER + " text not null, "
+            + COLUMN_ESTROUS + " text not null, "
             + COLUMN_COMMENTS + " text not null, "
             + COLUMN_WAS_FED + " integer not null, "
             + COLUMN_HAD_FOOD_IN_ENCLOSURE + " integer not null "
@@ -59,13 +61,14 @@ public class NotebookDbAdapter {
     }
 
     public Note createNote(String title, String message, Note.Category category, String observer,
-                           String comments, boolean wasFed, boolean hadFoodInEnclosure) {
+                           String estrous, String comments, boolean wasFed, boolean hadFoodInEnclosure) {
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, title);
         values.put(COLUMN_MESSAGE, message);
         values.put(COLUMN_CATEGORY, category.name());
         values.put(COLUMN_OBSERVER, observer);
+        values.put(COLUMN_ESTROUS, estrous);
         values.put(COLUMN_COMMENTS, comments);
         values.put(COLUMN_WAS_FED, wasFed);
         values.put(COLUMN_HAD_FOOD_IN_ENCLOSURE, hadFoodInEnclosure);
@@ -90,13 +93,14 @@ public class NotebookDbAdapter {
     }
 
     public long updateNote(long idToUpdate, String newTitle, String newMessage, Note.Category newCategory,
-                           String observer, String comments, boolean wasFed, boolean hadFoodInEnclosure) {
+                           String observer, String estrous, String comments, boolean wasFed, boolean hadFoodInEnclosure) {
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_TITLE, newTitle);
         values.put(COLUMN_MESSAGE, newMessage);
         values.put(COLUMN_CATEGORY, newCategory.name());
         values.put(COLUMN_OBSERVER, observer);
+        values.put(COLUMN_ESTROUS, estrous);
         values.put(COLUMN_COMMENTS, comments);
         values.put(COLUMN_WAS_FED, wasFed? 1 : 0);
         values.put(COLUMN_HAD_FOOD_IN_ENCLOSURE, hadFoodInEnclosure? 1 : 0);
@@ -125,7 +129,7 @@ public class NotebookDbAdapter {
     private Note cursorToNote (Cursor cursor) {
          Note newNote = new Note(cursor.getString(1), cursor.getString(2),
                 Note.Category.valueOf(cursor.getString(3)), cursor.getLong(0), cursor.getString(4),
-                 cursor.getString(5), cursor.getInt(6) == 1, cursor.getInt(7) == 1);
+                 cursor.getString(5), cursor.getString(6), cursor.getInt(7) == 1, cursor.getInt(8) == 1);
 
         return newNote;
     }

@@ -3,8 +3,8 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <ImageButton
-        android:id="@+id/editNoteButton"
+    <ImageView
+        android:id="@+id/editNoteIcon"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginEnd="16dp"
@@ -18,9 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginTop="8dp"
-        android:layout_toEndOf="@id/editNoteButton"
+        android:layout_toEndOf="@id/editNoteIcon"
         android:layout_toLeftOf="@+id/food_checkboxes"
-        android:layout_toRightOf="@id/editNoteButton"
+        android:layout_toRightOf="@id/editNoteIcon"
         android:layout_toStartOf="@+id/food_checkboxes"
         android:orientation="vertical">
 
@@ -33,14 +33,32 @@
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/editNoteObserver"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Observer / Coder"
-            android:maxLines="1"
-            android:textAppearance="?android:textAppearanceSmall" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <EditText
+                android:id="@+id/editNoteEstrous"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Estrous"
+                android:maxLines="1"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@android:color/black" />
+
+            <EditText
+                android:id="@+id/editNoteObserver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="32dp"
+                android:hint="Observer"
+                android:maxLines="1"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@android:color/black" />
+
+        </RelativeLayout>
         <EditText
             android:id="@+id/editNoteComments"
             android:layout_width="wrap_content"

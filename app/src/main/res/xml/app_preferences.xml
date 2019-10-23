@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="General">
-        <EditTextPreference
-            android:defaultValue="WhatsOb"
-            android:key="title"
-            android:summary="The title that will be used on the main action bar."
-            android:title="Notebook Title" />
-
+    <PreferenceCategory android:title="Observation Settings">
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/populationEntries"
+            android:entryValues="@array/populationValues"
+            android:key="population"
+            android:summary="%s"
+            android:title="Population" />
+        <ListPreference
+            android:defaultValue="0"
+            android:enabled="false"
+            android:entries="@array/ethogramEntries"
+            android:entryValues="@array/ethogramValues"
+            android:key="ethogram"
+            android:summary="%s"
+            android:title="Ethogram" />
     </PreferenceCategory>
 
-    <!--<PreferenceCategory android:title="Export">-->
+    <PreferenceCategory android:title="App Development">
+        <Preference
+            android:key="static_info_field"
+            android:selectable="false"
+            android:summary="Email: j.watzek@gmail.com\nPhone: (404) 840-6838"
+            android:title="Contact" />
 
-        <!--<CheckBoxPreference-->
-            <!--android:title="File Format"-->
-            <!--android:summary="Export file as CSV instead of plain text?"-->
-            <!--android:key="file_format"-->
-            <!--android:defaultValue="false" />-->
+        <Preference
+            android:key="static_info_field"
+            android:selectable="false"
+            android:summary="Jan 31, 2019"
+            android:title="Last updated" />
 
-    <!--</PreferenceCategory>-->
-
+    </PreferenceCategory>
 </PreferenceScreen>

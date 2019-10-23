@@ -2,18 +2,21 @@ package com.juliawatzek.whatsob;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+
+import static com.juliawatzek.whatsob.Note.Category.GABE;
+import static com.juliawatzek.whatsob.Note.Category.GRIFFIN;
+import static com.juliawatzek.whatsob.Note.Category.LIAM;
+import static com.juliawatzek.whatsob.Note.Category.LOGAN;
+import static com.juliawatzek.whatsob.Note.Category.MASON;
+import static com.juliawatzek.whatsob.Note.Category.NKIMA;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,12 +25,14 @@ public class MainActivity extends AppCompatActivity {
     public static final String NOTE_MESSAGE_EXTRA = "com.juliawatzek.whatsob.Message";
     public static final String NOTE_CATEGORY_EXTRA = "com.juliawatzek.whatsob.Category";
     public static final String NOTE_OBSERVER_EXTRA = "com.juliawatzek.whatsob.Observer";
+    public static final String NOTE_ESTROUS_EXTRA = "com.juliawatzek.whatsob.Estrous";
     public static final String NOTE_COMMENTS_EXTRA = "com.juliawatzek.whatsob.Comments";
     public static final String NOTE_WAS_FED_EXTRA = "com.juliawatzek.whatsob.WasFed";
     public static final String NOTE_HAD_FOOD_IN_ENCLOSURE_EXTRA = "com.juliawatzek.whatsob.HadFoodInEnclosure";
     public static final String NOTE_FRAGMENT_TO_LOAD_EXTRA = "com.juliawatzek.whatsob.FragmentToLoad";
 
     public static int REQUEST_EXIT = 0;
+    public static String population;
 
     public enum FragmentToLaunch {VIEW, EDIT, CREATE}
 
@@ -37,17 +42,38 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        loadPreferences();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+                population = sharedPreferences.getString("population", "no selection");
+
                 Intent intent = new Intent(view.getContext(), NoteDetailActivity.class);
+                intent.putExtra(MainActivity.NOTE_CATEGORY_EXTRA, stringToCategory(population));
                 intent.putExtra(MainActivity.NOTE_FRAGMENT_TO_LOAD_EXTRA, MainActivity.FragmentToLaunch.CREATE);
                 startActivity(intent);
             }
         });
+    }
+
+    private Note.Category stringToCategory(String population) {
+        switch (population) {
+            case "0":
+                return LOGAN;
+            case "1":
+                return GRIFFIN;
+            case "2":
+                return NKIMA;
+            case "3":
+                return MASON;
+            case "4":
+                return GABE;
+            case "5":
+                return LIAM;
+        }
+        return GRIFFIN;
     }
 
     @Override
@@ -74,17 +100,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void loadPreferences() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        String notebookTitle = sharedPreferences.getString("title", "WhatsOb");
-        setTitle(notebookTitle);
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_EXIT)
         {

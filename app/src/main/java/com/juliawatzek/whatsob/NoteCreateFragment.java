@@ -5,9 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.SystemClock;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -19,7 +17,7 @@ import android.widget.CheckBox;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.GridLayout;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -27,27 +25,25 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class NoteCreateFragment extends Fragment {
 
-    private TextView title, message, observer, comments;
+    private TextView title, message, observer, estrous, comments;
     private CheckBox wasFed, hadFoodInEnclosure;
-    private ImageButton noteCatButton;
-    private Button enterButton, startButton, shareButton, noteButton;
+    private Button startButton;
     private LinearLayout quickTextButtons;
     private ScrollView scroll;
-    private Note.Category savedButtonCategory;
-    private AlertDialog categoryDialogObject, confirmDialogObject, shareDialogObject, noteDialogObject;
+    private Note.Category noteCategory;
+    private AlertDialog confirmDialogObject, shareDialogObject, feedDialogObject, aggressDialogObject, adlibDialogObject, noteDialogObject;
     private Note note;
     private Chronometer timer;
-    private CountDownTimer countdown;
     private boolean timestampNext = true;
     private boolean isStart = true;
-    private String share;
+    private String share, feed, aggress, adlib;
     private InputMethodManager imm;
-
-    private static final String MODIFIED_CATEGORY = "Modified Category";
+    private View fragmentLayout;
 
     public NoteCreateFragment() {
         // Required empty public constructor
@@ -55,7 +51,7 @@ public class NoteCreateFragment extends Fragment {
 
 
     private String milliToMinSec(long timeInMillies) {
-        return String.format("%02d:%02d",
+        return String.format(Locale.getDefault(),"%02d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(timeInMillies),
                 TimeUnit.MILLISECONDS.toSeconds(timeInMillies) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeInMillies))
@@ -66,67 +62,75 @@ public class NoteCreateFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if (savedInstanceState != null) {
-            savedButtonCategory = (Note.Category) savedInstanceState.getSerializable(MODIFIED_CATEGORY);
+        // get note category
+        Intent intent = getActivity().getIntent();
+        noteCategory = (Note.Category) intent.getSerializableExtra(MainActivity.NOTE_CATEGORY_EXTRA);
+
+        // Depending on category, inflate the layout for this fragment
+        switch (noteCategory) {
+            case GABE:
+                fragmentLayout = inflater.inflate(R.layout.fragment_note_create_gabe, container, false);
+                break;
+            case GRIFFIN:
+                fragmentLayout = inflater.inflate(R.layout.fragment_note_create_griffin, container, false);
+                break;
+            case LIAM:
+                fragmentLayout = inflater.inflate(R.layout.fragment_note_create_liam, container, false);
+                break;
+            case LOGAN:
+                fragmentLayout = inflater.inflate(R.layout.fragment_note_create_logan, container, false);
+                break;
+            case MASON:
+                fragmentLayout = inflater.inflate(R.layout.fragment_note_create_mason, container, false);
+                break;
+            case NKIMA:
+                fragmentLayout = inflater.inflate(R.layout.fragment_note_create_nkima, container, false);
+                break;
+
         }
 
-        // Inflate the layout for this fragment
-        View fragmentLayout = inflater.inflate(R.layout.fragment_note_create, container, false);
-
         // grab widget references from layout
-        title = (TextView) fragmentLayout.findViewById(R.id.createNoteTitle);
-        message = (TextView) fragmentLayout.findViewById(R.id.createNoteMessage);
-        noteCatButton = (ImageButton) fragmentLayout.findViewById(R.id.createNoteButton);
-        observer = (TextView) fragmentLayout.findViewById(R.id.createNoteObserver);
-        comments = (TextView) fragmentLayout.findViewById(R.id.createNoteComments);
-        wasFed = (CheckBox) fragmentLayout.findViewById(R.id.createWasFed);
-        hadFoodInEnclosure = (CheckBox) fragmentLayout.findViewById(R.id.createHadFoodInEnclosure);
+        title = fragmentLayout.findViewById(R.id.createNoteTitle);
+        message = fragmentLayout.findViewById(R.id.createNoteMessage);
+        ImageView icon = fragmentLayout.findViewById(R.id.createNoteIcon);
+        observer = fragmentLayout.findViewById(R.id.createNoteObserver);
+        estrous = fragmentLayout.findViewById(R.id.createNoteEstrous);
+        comments = fragmentLayout.findViewById(R.id.createNoteComments);
+        wasFed = fragmentLayout.findViewById(R.id.createWasFed);
+        hadFoodInEnclosure = fragmentLayout.findViewById(R.id.createHadFoodInEnclosure);
 
-        quickTextButtons = (LinearLayout) fragmentLayout.findViewById(R.id.quickTextButtons);
-        enterButton = (Button) fragmentLayout.findViewById(R.id.createNote);
-        shareButton = (Button) fragmentLayout.findViewById(R.id.shareButton);
-        noteButton = (Button) fragmentLayout.findViewById(R.id.otherButton);
-        startButton = (Button) fragmentLayout.findViewById(R.id.startButton);
-        timer = (Chronometer) fragmentLayout.findViewById(R.id.timer);
+        quickTextButtons = fragmentLayout.findViewById(R.id.quickTextButtons);
+        Button enterButton = fragmentLayout.findViewById(R.id.createNote);
+        Button shareButton = fragmentLayout.findViewById(R.id.shareButton);
+        Button feedButton = fragmentLayout.findViewById(R.id.feedButton);
+        Button aggressButton = fragmentLayout.findViewById(R.id.aggressButton);
+        Button adlibButton = fragmentLayout.findViewById(R.id.adlibButton);
+        Button noteButton = fragmentLayout.findViewById(R.id.otherButton);
+        startButton = fragmentLayout.findViewById(R.id.startButton);
+        timer = fragmentLayout.findViewById(R.id.timer);
 
         // get input manager for soft keyboard
         imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        // populate widgets with note data
-        Intent intent = getActivity().getIntent();
 
         // Set 'title' to current date and time
         String currentDateTime = DateFormat.getDateTimeInstance().format(new Date());
         title.setText(currentDateTime);
         message.setText("");
+        icon.setImageResource(Note.categoryToDrawable(noteCategory));
 
         // Get scrollview
-        scroll = (ScrollView) fragmentLayout.findViewById(R.id.createScrollView);
+        scroll = fragmentLayout.findViewById(R.id.createScrollView);
 
-        // if we came from our list fragment, get category from intent
-        // otherwise (i.e., if we changed screen orientation), skip this and just set the image to
-        // the category info we retrieved from the bundle
-        if (savedButtonCategory == null) {
-            savedButtonCategory = (Note.Category) intent.getSerializableExtra(MainActivity.NOTE_CATEGORY_EXTRA);
-        }
-
-        buildCategoryDialog();
         buildConfirmDialog();
         buildShareDialog();
+        buildFeedDialog();
+        buildAggressDialog();
+        buildAdlibDialog();
         buildNoteDialog();
-
-        noteCatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                categoryDialogObject.show();
-            }
-        });
 
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                // TODO: On leaving screen, bring up confirm dialog. If really leaving, quit timer.
 
                 if (isStart) {
                     // hide soft keyboard
@@ -137,28 +141,30 @@ public class NoteCreateFragment extends Fragment {
                     timer.start();
 
                     // change text on Start button to Stop.
-                    startButton.setText("Stop");
+                    startButton.setText(R.string.stop_button);
                     isStart = false;
 
                     // sound
                     final MediaPlayer mp = MediaPlayer.create(getActivity(), R.raw.correct_a_tone);
 
+                    // initial start
+                    Toast.makeText(getActivity(), "SCAN TIME!", Toast.LENGTH_LONG).show();
+                    mp.start();
+
                     // set 3min alarms
-                    // TODO: Make this a Snackbar instead?
-                    countdown = new CountDownTimer(1800000 + 500, 180000) {
+                    timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
 
-                        public void onTick(long millisUntilFinished) {
-                            Toast.makeText(getActivity(), "SCAN TIME!", Toast.LENGTH_LONG).show();
-                            mp.start();
+                        @Override
+                        public void onChronometerTick(Chronometer chronometer) {
+                            long elapsedMillis = SystemClock.elapsedRealtime() - timer.getBase();
+
+                            if ((elapsedMillis / 1000) % 180 == 0) {
+                                Toast.makeText(getActivity(), "SCAN TIME!", Toast.LENGTH_LONG).show();
+                                mp.start();
+                            }
                         }
 
-                        public void onFinish() {
-                            Toast.makeText(getActivity(), "LAST SCAN!", Toast.LENGTH_LONG).show();
-
-                            mp.start();
-                            this.cancel();
-                        }
-                    }.start();
+                    });
 
                     // first prompt
                     message.append("\u00BB  ");
@@ -168,7 +174,6 @@ public class NoteCreateFragment extends Fragment {
 
                 } else {
                     confirmDialogObject.show();
-                    countdown.cancel();
                 }
 
 
@@ -176,7 +181,7 @@ public class NoteCreateFragment extends Fragment {
         });
 
         // attach onClickListeners to all ID buttons 
-        GridLayout individuals = (GridLayout) fragmentLayout.findViewById(R.id.layoutIds);
+        GridLayout individuals = fragmentLayout.findViewById(R.id.layoutIds);
         int idCount = individuals.getChildCount();
 
         for (int i = 0; i < idCount; i++) {
@@ -199,7 +204,7 @@ public class NoteCreateFragment extends Fragment {
         }
 
         // attach onClickListeners to all behavior buttons 
-        GridLayout grid = (GridLayout) fragmentLayout.findViewById(R.id.layoutBehavs);
+        GridLayout grid = fragmentLayout.findViewById(R.id.layoutBehavs);
         int behavCount = grid.getChildCount();
 
         for (int i = 0; i < behavCount; i++) {
@@ -216,17 +221,25 @@ public class NoteCreateFragment extends Fragment {
                             message.append(milliToMinSec(elapsedMillis) + " ");
                             timestampNext = false;
                         }
+
                         message.append(behav.getText() + " ");
                     }
                 });
             }
         }
 
+        final MediaPlayer emp = MediaPlayer.create(getActivity(), R.raw.enter_blip);
+
         // this needs to be after grid onClickListeners in order to override them
         enterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 enterDataRow();
+                if (emp.isPlaying()) {
+                    emp.seekTo(0);
+                } else {
+                    emp.start();
+                }
             }
         });
 
@@ -234,6 +247,27 @@ public class NoteCreateFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 shareDialogObject.show();
+            }
+        });
+
+        feedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                feedDialogObject.show();
+            }
+        });
+
+        aggressButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                aggressDialogObject.show();
+            }
+        });
+
+        adlibButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adlibDialogObject.show();
             }
         });
 
@@ -247,15 +281,6 @@ public class NoteCreateFragment extends Fragment {
 
         return fragmentLayout;
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-
-        savedInstanceState.putSerializable(MODIFIED_CATEGORY, savedButtonCategory);
-        // TODO: Save visibility of quick-text buttons + message etc.! Everything that gets overwritten or reset on onCreate.
-    }
-
 
 
     private void buildShareDialog() {
@@ -302,6 +327,158 @@ public class NoteCreateFragment extends Fragment {
     }
 
 
+    private void buildFeedDialog() {
+
+        final String[] feeding = new String[]{"Solo-Feed", "Proximity-Feed", "Contact-Feed", "Forage"};
+
+        AlertDialog.Builder feedBuilder = new AlertDialog.Builder(getActivity());
+        feedBuilder.setTitle("Choose Behavior");
+
+        feedBuilder.setSingleChoiceItems(feeding, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                // dismisses dialog window
+                feedDialogObject.cancel();
+
+                switch (item) {
+                    case 0:
+                        feed = "Solo-Feed";
+                        break;
+                    case 1:
+                        feed = "Proximity-Feed";
+                        break;
+                    case 2:
+                        feed = "Contact-Feed";
+                        break;
+                    case 3:
+                        feed = "Forage";
+                        break;
+                }
+
+                if (timestampNext) {
+                    long elapsedMillis = SystemClock.elapsedRealtime() - timer.getBase();
+
+                    message.append(milliToMinSec(elapsedMillis) + " ");
+                    timestampNext = false;
+                }
+
+                message.append(feed + " ");
+
+            }
+        });
+        feedDialogObject = feedBuilder.create();
+    }
+
+
+    private void buildAggressDialog() {
+
+        final String[] aggressing = new String[]{"Aggression", "Supplant"};
+
+        AlertDialog.Builder aggressBuilder = new AlertDialog.Builder(getActivity());
+        aggressBuilder.setTitle("Choose Behavior");
+
+        aggressBuilder.setSingleChoiceItems(aggressing, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                // dismisses dialog window
+                aggressDialogObject.cancel();
+
+                switch (item) {
+                    case 0:
+                        aggress = "Aggress";
+                        break;
+                    case 1:
+                        aggress = "Supplant";
+                        break;
+                }
+
+                if (timestampNext) {
+                    long elapsedMillis = SystemClock.elapsedRealtime() - timer.getBase();
+
+                    message.append(milliToMinSec(elapsedMillis) + " ");
+                    timestampNext = false;
+                }
+
+                message.append(aggress + " ");
+
+            }
+        });
+        aggressDialogObject = aggressBuilder.create();
+    }
+
+
+    private void buildAdlibDialog() {
+
+        final String[] adlibing = new String[]{"Non-contact Aggression", "Contact Aggression",
+                "Intergroup Aggression", "Submissive", "Solicit", "Supplant", "Intervene",
+                "Post-conflict Affiliation", "Sexual", "Intergroup Sexual", "Beg", "Food Share"};
+
+        AlertDialog.Builder adlibBuilder = new AlertDialog.Builder(getActivity());
+        adlibBuilder.setTitle("Choose Behavior");
+
+        adlibBuilder.setSingleChoiceItems(adlibing, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                // dismisses dialog window
+                adlibDialogObject.cancel();
+
+                switch (item) {
+                    case 0:
+                        adlib = "NC-Aggress*";
+                        break;
+                    case 1:
+                        adlib = "C-Aggress*";
+                        break;
+                    case 2:
+                        adlib = "Aggress* Inter-G";
+                        break;
+                    case 3:
+                        adlib = "Submissive*";
+                        break;
+                    case 4:
+                        adlib = "Solicit*";
+                        break;
+                    case 5:
+                        adlib = "Supplant*";
+                        break;
+                    case 6:
+                        adlib = "Intervene*";
+                        break;
+                    case 7:
+                        adlib = "PC-Affil*";
+                        break;
+                    case 8:
+                        adlib = "Sexual*";
+                        break;
+                    case 9:
+                        adlib = "Sexual* Inter-G";
+                        break;
+                    case 10:
+                        adlib = "Beg*";
+                        break;
+                    case 11:
+                        adlib = "Food-Share*";
+                        break;
+                }
+
+                if (timestampNext) {
+                    long elapsedMillis = SystemClock.elapsedRealtime() - timer.getBase();
+
+                    message.append(milliToMinSec(elapsedMillis) + " ");
+                    timestampNext = false;
+                }
+
+                message.append(adlib + " ");
+
+            }
+        });
+        adlibDialogObject = adlibBuilder.create();
+    }
+
+
     private void buildNoteDialog() {
 
         AlertDialog.Builder noteBuilder = new AlertDialog.Builder(getActivity());
@@ -345,45 +522,6 @@ public class NoteCreateFragment extends Fragment {
 
     }
 
-
-    private void buildCategoryDialog() {
-
-        final String[] categories = new String[]{"Griffin's Group", "Liam's Group", "Mason's Group", "Nkima's Group"};
-
-        AlertDialog.Builder categoryBuilder = new AlertDialog.Builder(getActivity());
-        categoryBuilder.setTitle("Choose Group");
-
-        categoryBuilder.setSingleChoiceItems(categories, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-
-                // dismisses dialog window
-                categoryDialogObject.cancel();
-
-                switch (item) {
-                    case 0:
-                        savedButtonCategory = Note.Category.GRIFFIN;
-                        noteCatButton.setImageResource(R.drawable.g);
-                        break;
-                    case 1:
-                        savedButtonCategory = Note.Category.LIAM;
-                        noteCatButton.setImageResource(R.drawable.l);
-                        break;
-                    case 2:
-                        savedButtonCategory = Note.Category.MASON;
-                        noteCatButton.setImageResource(R.drawable.m);
-                        break;
-                    case 3:
-                        savedButtonCategory = Note.Category.NKIMA;
-                        noteCatButton.setImageResource(R.drawable.n);
-                        break;
-                }
-
-            }
-        });
-        categoryDialogObject = categoryBuilder.create();
-    }
-
     private void buildConfirmDialog() {
 
         AlertDialog.Builder confirmBuilder = new AlertDialog.Builder(getActivity());
@@ -398,15 +536,14 @@ public class NoteCreateFragment extends Fragment {
 
                 if (note != null) {
                     // if there is a note, update it in database
-                    dbAdapter.updateNote(note.getNoteId(), title.getText() + "", message.getText() + "",
-                            note.getCategory(), note.getObserver(), note.getComments(), note.getWasFed(),
-                            note.getHadFoodInEnclosure());
+                    dbAdapter.updateNote(note.getNoteId(), note.getTitle() + "", message.getText() + "",
+                            note.getCategory(), observer.getText() + "", estrous.getText() + "", comments.getText() + "",
+                            wasFed.isChecked(), hadFoodInEnclosure.isChecked());
                 } else {
                     // else, save as new note in our database
                     note = dbAdapter.createNote(title.getText() + "", message.getText() + "",
-                            (savedButtonCategory == null) ? Note.Category.GRIFFIN : savedButtonCategory,
-                            observer.getText() + "", comments.getText() + "", wasFed.isChecked(),
-                            hadFoodInEnclosure.isChecked());
+                            noteCategory, observer.getText() + "", estrous.getText() + "", comments.getText() + "",
+                            wasFed.isChecked(), hadFoodInEnclosure.isChecked());
                 }
 
                 dbAdapter.close();
@@ -449,15 +586,14 @@ public class NoteCreateFragment extends Fragment {
 
         if (note != null) {
             // if there is a note, update it in database
-            dbAdapter.updateNote(note.getNoteId(), title.getText() + "", message.getText() + "", note.getCategory(),
-                    observer.getText() + "", comments.getText() + "", wasFed.isChecked(),
-                    hadFoodInEnclosure.isChecked());
+            dbAdapter.updateNote(note.getNoteId(), note.getTitle() + "", message.getText() + "",
+                    note.getCategory(), observer.getText() + "", estrous.getText() + "", comments.getText() + "",
+                    wasFed.isChecked(), hadFoodInEnclosure.isChecked());
         } else {
-            // else, save as new note in our database
+            // else, save as new note in database
             note = dbAdapter.createNote(title.getText() + "", message.getText() + "",
-                    (savedButtonCategory == null) ? Note.Category.GRIFFIN : savedButtonCategory,
-                    observer.getText() + "", comments.getText() + "", wasFed.isChecked(),
-                    hadFoodInEnclosure.isChecked());
+                    noteCategory, observer.getText() + "", estrous.getText() + "", comments.getText() + "",
+                    wasFed.isChecked(), hadFoodInEnclosure.isChecked());
         }
         dbAdapter.close();
 

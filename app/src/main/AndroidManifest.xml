@@ -21,7 +21,6 @@
         </activity>
         <activity
             android:name=".NoteDetailActivity"
-            android:parentActivityName=".MainActivity"
             android:label="@string/edit_fragment_title"
             android:screenOrientation="portrait"></activity>
         <activity
